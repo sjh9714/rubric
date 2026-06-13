@@ -1,0 +1,14 @@
+version: 1
+
+project:
+  name: rubric-example
+  default_base: develop
+  package_manager: pnpm
+
+paths:
+  api:
+    - server/routes/**
+
+output:
+  format: json
+  max_findings: 10

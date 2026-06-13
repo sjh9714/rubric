@@ -1,0 +1,3 @@
+id: defaults.rule
+title: Defaults apply
+message: Defaults should fill optional rule fields.
