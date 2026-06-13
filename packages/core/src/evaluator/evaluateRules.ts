@@ -134,8 +134,9 @@ function evaluateRule(
     );
   }
 
+  const addedPatchText = getAddedPatchText(changeSet.patch);
   const matchedAddedPatterns = (checks.added_patterns ?? []).filter((pattern) =>
-    matchesPatch(rule.id, pattern, changeSet.patch)
+    matchesPatch(rule.id, pattern, addedPatchText)
   );
   if (matchedAddedPatterns.length > 0) {
     findings.push(
@@ -176,6 +177,14 @@ function matchesPatch(ruleId: string, pattern: string, patch: string): boolean {
       { cause: error }
     );
   }
+}
+
+function getAddedPatchText(patch: string): string {
+  return patch
+    .split(/\r?\n/)
+    .filter((line) => line.startsWith("+") && !line.startsWith("+++"))
+    .map((line) => line.slice(1))
+    .join("\n");
 }
 
 function includesSection(body: string, section: string): boolean {

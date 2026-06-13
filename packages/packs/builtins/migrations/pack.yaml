@@ -1,0 +1,3 @@
+name: migrations
+title: Migration rules
+description: Rules for safer database migration reviews.

@@ -1,0 +1,33 @@
+id: agent.commands-run-required
+title: PR description should list commands run
+description: PR authors and coding agents should disclose which checks they ran.
+severity: warning
+
+applies_to:
+  paths:
+    - "**/*"
+
+checks:
+  required_pr_body_sections:
+    any:
+      - "Commands run"
+      - "Verification"
+      - "Tests run"
+      - "Test plan"
+
+message: |
+  This PR does not document which commands were run.
+
+suggestion: |
+  Add a "Commands run" or "Verification" section to the PR description.
+
+compile:
+  targets:
+    - agents
+    - claude
+    - copilot
+    - pr_template
+
+evidence:
+  source: manual
+  confidence: 0.75

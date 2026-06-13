@@ -1,5 +1,6 @@
 import { Command } from "commander";
 
+import { addAddPackCommand } from "./commands/addPack.js";
 import { addCheckCommand } from "./commands/check.js";
 
 export const productDescription =
@@ -17,6 +18,7 @@ export function createCliProgram(): Command {
       program.outputHelp();
     });
 
+  addAddPackCommand(program);
   addCheckCommand(program);
 
   return program;

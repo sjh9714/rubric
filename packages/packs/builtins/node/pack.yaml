@@ -1,0 +1,3 @@
+name: node
+title: Node.js rules
+description: Rules for Node.js dependency and package changes.

@@ -1,0 +1,36 @@
+id: testing.required-for-auth-change
+title: Auth and permission changes require tests
+description: Auth, permission, and access-control changes should include tests.
+severity: error
+
+applies_to:
+  paths:
+    - "**/auth/**"
+    - "**/permissions/**"
+    - "**/authorization/**"
+    - "**/*auth*.ts"
+    - "**/*permission*.ts"
+
+checks:
+  required_changed_files:
+    any:
+      - "**/*.test.ts"
+      - "**/*.spec.ts"
+      - "tests/**"
+      - "__tests__/**"
+
+message: |
+  This PR changes auth or permission-related code but does not modify tests.
+
+suggestion: |
+  Add tests that cover the changed access-control behavior.
+
+compile:
+  targets:
+    - agents
+    - claude
+    - copilot
+
+evidence:
+  source: manual
+  confidence: 0.85

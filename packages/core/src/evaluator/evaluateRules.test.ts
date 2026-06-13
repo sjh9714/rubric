@@ -193,7 +193,7 @@ describe("evaluateRules", () => {
     ]);
   });
 
-  it("matches added_patterns against the raw patch", async () => {
+  it("matches added_patterns against added patch lines", async () => {
     const findings = await evaluateRules({
       rules: [
         rule({
@@ -219,6 +219,44 @@ describe("evaluateRules", () => {
         ]
       })
     ]);
+  });
+
+  it("does not match added_patterns against removed patch lines", async () => {
+    const findings = await evaluateRules({
+      rules: [
+        rule({
+          checks: {
+            added_patterns: ["sk-old-secret"]
+          }
+        })
+      ],
+      changeSet: changeSet([changedFile("src/api/users.ts")], {
+        patch:
+          "-const token = 'sk-old-secret';\n+const token = process.env.API_KEY;\n"
+      }),
+      config: defaultConfig()
+    });
+
+    expect(findings).toEqual([]);
+  });
+
+  it("does not match added_patterns against diff headers", async () => {
+    const findings = await evaluateRules({
+      rules: [
+        rule({
+          checks: {
+            added_patterns: ["src/api/users\\.ts"]
+          }
+        })
+      ],
+      changeSet: changeSet([changedFile("src/api/users.ts")], {
+        patch:
+          "diff --git a/src/api/users.ts b/src/api/users.ts\n--- a/src/api/users.ts\n+++ b/src/api/users.ts\n@@ -1 +1 @@\n+export const user = 'new';\n"
+      }),
+      config: defaultConfig()
+    });
+
+    expect(findings).toEqual([]);
   });
 
   it("throws RubricError for invalid added_patterns regex", async () => {
