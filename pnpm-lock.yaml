@@ -37,6 +37,9 @@ importers:
 
   apps/cli:
     dependencies:
+      "@rubric-dev/core":
+        specifier: workspace:*
+        version: link:../../packages/core
       commander:
         specifier: ^15.0.0
         version: 15.0.0

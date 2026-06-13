@@ -1,6 +1,10 @@
 import { describe, expect, it } from "vitest";
 
-import { createCliProgram, productDescription } from "../src/program.js";
+import {
+  createCliProgram,
+  normalizeCliArgv,
+  productDescription
+} from "../src/program.js";
 
 describe("rubric CLI help", () => {
   it("renders help with the CLI name and product description", () => {
@@ -22,5 +26,13 @@ describe("rubric CLI help", () => {
     await program.parseAsync(["node", "rubric"], { from: "node" });
 
     expect(output.join("")).toContain(productDescription);
+  });
+
+  it("normalizes package-manager argument separators", () => {
+    expect(normalizeCliArgv(["node", "rubric", "--", "check"])).toEqual([
+      "node",
+      "rubric",
+      "check"
+    ]);
   });
 });
