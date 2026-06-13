@@ -4,7 +4,7 @@
   "private": true,
   "description": "Preflight checks for AI-generated pull requests.",
   "type": "module",
-  "packageManager": "pnpm@11.5.0",
+  "packageManager": "pnpm@10.34.3",
   "engines": {
     "node": ">=20"
   },
