@@ -1,0 +1,3 @@
+name: testing
+title: Testing rules
+description: Rules for requiring tests around risky changes.

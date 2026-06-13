@@ -1,0 +1,34 @@
+id: db.migration-rollback-note
+title: Database migrations require rollback notes
+description: Migration PRs should document how to roll back safely.
+severity: error
+
+applies_to:
+  paths:
+    - "db/migrations/**"
+    - "prisma/migrations/**"
+    - "migrations/**"
+
+checks:
+  required_pr_body_sections:
+    any:
+      - "Rollback"
+      - "Rollback plan"
+      - "Migration rollback"
+
+message: |
+  This PR changes database migrations but the PR body does not include a rollback plan.
+
+suggestion: |
+  Add a "Rollback plan" section to the PR description.
+
+compile:
+  targets:
+    - agents
+    - claude
+    - copilot
+    - pr_template
+
+evidence:
+  source: manual
+  confidence: 0.85

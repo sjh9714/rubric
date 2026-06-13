@@ -40,6 +40,9 @@ importers:
       "@rubric-dev/core":
         specifier: workspace:*
         version: link:../../packages/core
+      "@rubric-dev/packs":
+        specifier: workspace:*
+        version: link:../../packages/packs
       commander:
         specifier: ^15.0.0
         version: 15.0.0
@@ -68,7 +71,17 @@ importers:
 
   packages/llm: {}
 
-  packages/packs: {}
+  packages/packs:
+    dependencies:
+      "@rubric-dev/core":
+        specifier: workspace:*
+        version: link:../core
+      yaml:
+        specifier: ^2.9.0
+        version: 2.9.0
+      zod:
+        specifier: ^4.4.3
+        version: 4.4.3
 
 packages:
   "@emnapi/core@1.10.0":

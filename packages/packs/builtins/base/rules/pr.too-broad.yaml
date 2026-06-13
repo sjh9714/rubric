@@ -1,0 +1,27 @@
+id: pr.too-broad
+title: PR changes too many directories
+description: Broad PRs are harder to review and more likely to hide unrelated changes.
+severity: warning
+
+applies_to:
+  paths:
+    - "**/*"
+
+checks:
+  changed_directories_greater_than: 8
+
+message: |
+  This PR changes files across many directories.
+
+suggestion: |
+  Consider splitting unrelated cleanup or refactoring into a separate PR.
+
+compile:
+  targets:
+    - agents
+    - claude
+    - copilot
+
+evidence:
+  source: manual
+  confidence: 0.7

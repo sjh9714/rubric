@@ -1,0 +1,33 @@
+id: db.destructive-migration-warning
+title: Destructive migration needs extra review
+description: Potentially destructive database operations should be called out explicitly.
+severity: warning
+
+applies_to:
+  paths:
+    - "db/migrations/**"
+    - "prisma/migrations/**"
+    - "migrations/**"
+
+checks:
+  added_patterns:
+    - "\\bDROP\\s+TABLE\\b"
+    - "\\bDROP\\s+COLUMN\\b"
+    - "\\bTRUNCATE\\b"
+    - "\\bDELETE\\s+FROM\\b"
+
+message: |
+  This migration appears to contain a potentially destructive database operation.
+
+suggestion: |
+  Call out the destructive operation, data safety plan, and rollback approach in the PR description.
+
+compile:
+  targets:
+    - agents
+    - claude
+    - copilot
+
+evidence:
+  source: manual
+  confidence: 0.8

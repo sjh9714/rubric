@@ -1,0 +1,34 @@
+id: node.new-dependency-note
+title: Dependency changes should be explained
+description: Changes to package manifests should explain why the dependency changed.
+severity: warning
+
+applies_to:
+  paths:
+    - "package.json"
+    - "apps/*/package.json"
+    - "packages/*/package.json"
+
+checks:
+  required_pr_body_sections:
+    any:
+      - "Dependencies"
+      - "Dependency changes"
+      - "Why this dependency"
+
+message: |
+  This PR changes a package manifest but does not explain dependency changes.
+
+suggestion: |
+  Add a short note explaining why the dependency was added, removed, or changed.
+
+compile:
+  targets:
+    - agents
+    - claude
+    - copilot
+    - pr_template
+
+evidence:
+  source: manual
+  confidence: 0.75

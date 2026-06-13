@@ -23,6 +23,7 @@
   },
   "dependencies": {
     "@rubric-dev/core": "workspace:*",
+    "@rubric-dev/packs": "workspace:*",
     "commander": "^15.0.0"
   }
 }
