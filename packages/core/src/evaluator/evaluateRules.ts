@@ -179,7 +179,7 @@ function matchesPatch(ruleId: string, pattern: string, patch: string): boolean {
 }
 
 function includesSection(body: string, section: string): boolean {
-  return body.toLocaleLowerCase().includes(section.toLocaleLowerCase());
+  return body.toLowerCase().includes(section.toLowerCase());
 }
 
 function sortedPaths(files: ChangedFile[]): string[] {
