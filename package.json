@@ -1,0 +1,30 @@
+{
+  "name": "rubric",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Preflight checks for AI-generated pull requests.",
+  "type": "module",
+  "packageManager": "pnpm@11.5.0",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "pnpm -r --if-present build",
+    "test": "vitest run",
+    "typecheck": "tsc -p tsconfig.json --pretty false",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^25.9.3",
+    "eslint": "^10.4.1",
+    "prettier": "^3.8.4",
+    "tsup": "^8.5.1",
+    "tsx": "^4.22.4",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.61.0",
+    "vitest": "^4.1.8"
+  }
+}

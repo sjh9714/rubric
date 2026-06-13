@@ -1,0 +1,20 @@
+{
+  "name": "@rubric-dev/core",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Core engine for rubric.",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup src/index.ts --format esm --dts --clean",
+    "test": "vitest run tests"
+  }
+}
