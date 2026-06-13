@@ -1,5 +1,7 @@
 import { Command } from "commander";
 
+import { addCheckCommand } from "./commands/check.js";
+
 export const productDescription =
   "Preflight checks for AI-generated pull requests.";
 
@@ -15,6 +17,8 @@ export function createCliProgram(): Command {
       program.outputHelp();
     });
 
+  addCheckCommand(program);
+
   return program;
 }
 
@@ -23,5 +27,15 @@ export async function runCli(
 ): Promise<void> {
   const program = createCliProgram();
 
-  await program.parseAsync([...argv], { from: "node" });
+  await program.parseAsync(normalizeCliArgv(argv), { from: "node" });
+}
+
+export function normalizeCliArgv(argv: readonly string[]): string[] {
+  const normalizedArgv = [...argv];
+
+  if (normalizedArgv[2] === "--") {
+    normalizedArgv.splice(2, 1);
+  }
+
+  return normalizedArgv;
 }

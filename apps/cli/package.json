@@ -18,10 +18,11 @@
   ],
   "scripts": {
     "build": "tsup src/index.ts src/program.ts --format esm --dts --clean",
-    "dev": "tsx src/index.ts",
+    "dev": "tsx --conditions=development src/index.ts",
     "test": "vitest run tests"
   },
   "dependencies": {
+    "@rubric-dev/core": "workspace:*",
     "commander": "^15.0.0"
   }
 }
