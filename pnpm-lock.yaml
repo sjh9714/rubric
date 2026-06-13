@@ -47,12 +47,19 @@ importers:
 
   packages/core:
     dependencies:
+      picomatch:
+        specifier: ^4.0.4
+        version: 4.0.4
       yaml:
         specifier: ^2.9.0
         version: 2.9.0
       zod:
         specifier: ^4.4.3
         version: 4.4.3
+    devDependencies:
+      "@types/picomatch":
+        specifier: ^4.0.3
+        version: 4.0.3
 
   packages/github: {}
 
@@ -1090,6 +1097,12 @@ packages:
     resolution:
       {
         integrity: sha512-603BddQMv3pUcr4U2dhujk83N2tTDVr/34wII2B6bJy6g+8WD6yUb11jszNs0gdi4PesVWl7ABt8nYMVpnLUcg==
+      }
+
+  "@types/picomatch@4.0.3":
+    resolution:
+      {
+        integrity: sha512-iG0T6+nYJ9FAPmx9SsUlnwcq1ZVRuCXcVEvWnntoPlrOpwtSTKNDC9uVAxTsC3PUvJ+99n4RpAcNgBbHX3JSnQ==
       }
 
   "@typescript-eslint/eslint-plugin@8.61.0":
@@ -2724,6 +2737,8 @@ snapshots:
   "@types/node@25.9.3":
     dependencies:
       undici-types: 7.24.6
+
+  "@types/picomatch@4.0.3": {}
 
   "@typescript-eslint/eslint-plugin@8.61.0(@typescript-eslint/parser@8.61.0(eslint@10.4.1)(typescript@6.0.3))(eslint@10.4.1)(typescript@6.0.3)":
     dependencies:

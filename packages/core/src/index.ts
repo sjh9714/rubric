@@ -41,3 +41,15 @@ export {
   type FindGitRootOptions,
   type MergeBaseOptions
 } from "./git/index.js";
+
+export {
+  evaluateRules,
+  type PullRequestMetadata,
+  type RuleEvaluationInput
+} from "./evaluator/index.js";
+
+export {
+  type Finding,
+  type FindingEvidence,
+  type FindingSeverity
+} from "./findings/index.js";
