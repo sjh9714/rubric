@@ -1,0 +1,4 @@
+id: Invalid Rule
+title: Invalid severity
+severity: blocker
+message: Broken rule message.

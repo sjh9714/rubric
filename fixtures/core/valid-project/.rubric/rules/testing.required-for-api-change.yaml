@@ -1,0 +1,33 @@
+id: testing.required-for-api-change
+title: API changes require tests
+description: API changes should include matching tests.
+severity: error
+
+applies_to:
+  paths:
+    - app/api/**
+    - src/api/**
+    - src/controllers/**
+
+checks:
+  required_changed_files:
+    any:
+      - "**/*.test.ts"
+      - "**/*.spec.ts"
+      - tests/**
+
+message: |
+  This PR changes API code but does not modify any test files.
+
+suggestion: |
+  Add or update tests covering the changed API behavior.
+
+compile:
+  targets:
+    - agents
+    - claude
+    - copilot
+
+evidence:
+  source: manual
+  confidence: 0.8
