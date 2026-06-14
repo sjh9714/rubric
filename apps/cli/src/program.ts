@@ -2,6 +2,7 @@ import { Command } from "commander";
 
 import { addAddPackCommand } from "./commands/addPack.js";
 import { addCheckCommand } from "./commands/check.js";
+import { addInitCommand } from "./commands/init.js";
 
 export const productDescription =
   "Preflight checks for AI-generated pull requests.";
@@ -20,6 +21,7 @@ export function createCliProgram(): Command {
 
   addAddPackCommand(program);
   addCheckCommand(program);
+  addInitCommand(program);
 
   return program;
 }
