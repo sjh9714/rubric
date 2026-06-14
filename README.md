@@ -16,17 +16,39 @@ This repository is currently in bootstrap mode. The first milestone is a local-f
 - Deterministic policy findings may fail CI
 - Semantic or LLM findings default to warnings
 
-## Planned CLI
+## Current CLI
 
 ```bash
-npx rubric demo
 npx rubric init
-npx rubric doctor
+npx rubric add-pack --list
+npx rubric add-pack testing migrations security
 npx rubric check --base main
-npx rubric compile
 ```
 
-Only `rubric --help` exists in this bootstrap pass.
+Implemented:
+
+- `rubric init`
+- `rubric add-pack`
+- `rubric check`
+
+Planned:
+
+- `rubric compile`
+- `rubric doctor`
+- `rubric demo`
+- GitHub PR history mining
+- evidence-linked rule proposals
+- optional LLM-assisted extraction
+
+## Quick local usage
+
+```bash
+npx rubric init
+npx rubric add-pack testing migrations security
+npx rubric check --base main
+```
+
+Core commands are local-first and do not require API keys.
 
 ## Development
 
@@ -49,7 +71,7 @@ pnpm --filter @rubric-dev/cli dev --help
 1. Bootstrap the TypeScript monorepo and CLI shell.
 2. Add config and rule schemas.
 3. Collect git diffs and evaluate deterministic rules.
-4. Implement `check`, `init`, `compile`, `doctor`, and `demo`.
-5. Add built-in rule packs and generated GitHub workflow support.
+4. Add built-in rule packs, generated GitHub workflow support, and `init`.
+5. Implement `compile`, `doctor`, and `demo`.
 
 Future milestones will add GitHub PR history mining, evidence-linked rule proposals, and optional LLM-assisted extraction.
