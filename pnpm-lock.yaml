@@ -37,6 +37,9 @@ importers:
 
   apps/cli:
     dependencies:
+      "@rubric-dev/compiler":
+        specifier: workspace:*
+        version: link:../../packages/compiler
       "@rubric-dev/core":
         specifier: workspace:*
         version: link:../../packages/core
@@ -49,7 +52,11 @@ importers:
 
   packages/action: {}
 
-  packages/compiler: {}
+  packages/compiler:
+    dependencies:
+      "@rubric-dev/core":
+        specifier: workspace:*
+        version: link:../core
 
   packages/core:
     dependencies:

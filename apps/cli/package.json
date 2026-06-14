@@ -22,6 +22,7 @@
     "test": "vitest run tests"
   },
   "dependencies": {
+    "@rubric-dev/compiler": "workspace:*",
     "@rubric-dev/core": "workspace:*",
     "@rubric-dev/packs": "workspace:*",
     "commander": "^15.0.0"

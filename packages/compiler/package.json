@@ -6,7 +6,8 @@
   "type": "module",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
+      "types": "./src/index.ts",
+      "development": "./src/index.ts",
       "import": "./dist/index.js"
     }
   },
@@ -16,5 +17,8 @@
   "scripts": {
     "build": "tsup src/index.ts --format esm --dts --clean",
     "test": "vitest run tests"
+  },
+  "dependencies": {
+    "@rubric-dev/core": "workspace:*"
   }
 }
