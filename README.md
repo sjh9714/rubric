@@ -28,44 +28,53 @@ rubric doctor
 rubric check --base main
 ```
 
+## What it does
+
+- Initializes team review rules.
+- Adds built-in rule packs for testing, migrations, security, and Node.
+- Compiles rules into `AGENTS.md`, `CLAUDE.md`, GitHub Copilot instructions,
+  Cursor rules, and PR template blocks.
+- Checks PR diffs before review.
+- Runs locally without GitHub tokens or LLM API keys.
+
 ## Commands
 
 Implemented:
 
-| Command           | What it does                                                                               |
-| ----------------- | ------------------------------------------------------------------------------------------ |
-| `rubric demo`     | Shows a zero-setup sample preflight report                                                 |
-| `rubric doctor`   | Checks whether a repo is AI-agent ready                                                    |
-| `rubric init`     | Creates starter Rubric config, rules, workflow, and PR template                            |
-| `rubric add-pack` | Adds built-in rule packs                                                                   |
-| `rubric compile`  | Generates AGENTS.md, CLAUDE.md, Copilot instructions, Cursor rules, and PR template blocks |
-| `rubric check`    | Checks the current diff against Rubric rules                                               |
+| Command           | What it does                                                     |
+| ----------------- | ---------------------------------------------------------------- |
+| `rubric demo`     | Shows a zero-setup sample preflight report.                      |
+| `rubric doctor`   | Checks whether a repo is AI-agent ready.                         |
+| `rubric init`     | Creates starter Rubric config, rules, workflow, and PR template. |
+| `rubric add-pack` | Adds built-in rule packs.                                        |
+| `rubric compile`  | Generates agent instruction files and PR template blocks.        |
+| `rubric check`    | Checks the current diff against Rubric rules.                    |
 
 ## Privacy
 
 Core commands are local-first.
 
 - No GitHub token required for `demo`, `doctor`, `init`, `add-pack`, `compile`,
-  or `check`
-- No LLM API key required
-- No telemetry by default
-- No code is sent to external services by core commands
+  or `check`.
+- No LLM API key required.
+- No telemetry by default.
+- No code is sent to external services by core commands.
 
 ## Principles
 
-- Team review memory, not AI code detection
-- Deterministic checks for predictable review feedback
-- No employee scoring or surveillance features
-- Semantic or LLM-assisted findings should default to warnings
+- Team review memory, not AI code detection.
+- Deterministic checks for predictable review feedback.
+- No employee scoring or surveillance features.
+- Semantic or LLM-assisted findings should default to warnings.
 
 ## Not yet
 
 Planned:
 
-- GitHub PR history mining
-- evidence-linked rule proposals
-- optional LLM-assisted extraction
-- GitHub Action comment mode
+- GitHub PR history mining.
+- Evidence-linked rule proposals.
+- Optional LLM-assisted extraction.
+- GitHub Action comment mode.
 
 ## Quick local usage
 
