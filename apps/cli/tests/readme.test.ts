@@ -20,4 +20,13 @@ describe("README CLI status", () => {
     expect(plannedSection).not.toContain("`rubric compile`");
     expect(plannedSection).not.toContain("`rubric doctor`");
   });
+
+  it("documents scoped npx usage until the first npm release", async () => {
+    const readme = await readFile(`${workspaceRoot}/README.md`, "utf8");
+
+    expect(readme).toContain("npx @rubric-dev/cli demo");
+    expect(readme).toContain("installs the `rubric` binary");
+    expect(readme).toContain("pnpm --filter @rubric-dev/cli dev -- demo");
+    expect(readme).not.toContain("npx rubric demo");
+  });
 });

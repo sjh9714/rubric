@@ -19,14 +19,17 @@ This repository is currently in bootstrap mode. The first milestone is a local-f
 ## Current CLI
 
 ```bash
-npx rubric doctor
-npx rubric demo
-npx rubric init
-npx rubric add-pack --list
-npx rubric add-pack testing migrations security
-npx rubric check --base main
-npx rubric compile
+npx @rubric-dev/cli doctor
+npx @rubric-dev/cli demo
+npx @rubric-dev/cli init
+npx @rubric-dev/cli add-pack --list
+npx @rubric-dev/cli add-pack testing migrations security
+npx @rubric-dev/cli check --base main
+npx @rubric-dev/cli compile
 ```
+
+The package installs the `rubric` binary, so installed projects can run
+`rubric demo`, `rubric doctor`, and the other commands directly.
 
 Implemented:
 
@@ -46,15 +49,17 @@ Planned:
 ## Quick local usage
 
 ```bash
-npx rubric doctor
-npx rubric demo
-npx rubric init
-npx rubric add-pack testing migrations security
-npx rubric check --base main
-npx rubric compile
+npx @rubric-dev/cli doctor
+npx @rubric-dev/cli demo
+npx @rubric-dev/cli init
+npx @rubric-dev/cli add-pack testing migrations security
+npx @rubric-dev/cli check --base main
+npx @rubric-dev/cli compile
 ```
 
 Core commands are local-first and do not require API keys.
+Until the first npm release, run locally with
+`pnpm --filter @rubric-dev/cli dev -- demo`.
 
 ## Development
 

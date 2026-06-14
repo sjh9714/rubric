@@ -38,13 +38,13 @@ importers:
   apps/cli:
     dependencies:
       "@rubric-dev/compiler":
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../packages/compiler
       "@rubric-dev/core":
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../packages/core
       "@rubric-dev/packs":
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../../packages/packs
       commander:
         specifier: ^15.0.0
@@ -55,7 +55,7 @@ importers:
   packages/compiler:
     dependencies:
       "@rubric-dev/core":
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../core
 
   packages/core:
@@ -81,7 +81,7 @@ importers:
   packages/packs:
     dependencies:
       "@rubric-dev/core":
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../core
       yaml:
         specifier: ^2.9.0
