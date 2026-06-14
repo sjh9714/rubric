@@ -1,4 +1,11 @@
-import { access, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
+import {
+  access,
+  mkdir,
+  mkdtemp,
+  readFile,
+  rm,
+  writeFile
+} from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
@@ -138,6 +145,23 @@ describe("compileRules", () => {
     await expect(access(join(repoRoot, "AGENTS.md"))).rejects.toThrow();
   });
 
+  it("skips targets without matching rules", async () => {
+    const repoRoot = await createRepoRoot();
+
+    const result = await compileRules({
+      repoRoot,
+      rules: [rule({ compile: { targets: ["agents"] } })],
+      config: config(["cursor"])
+    });
+
+    expect(result.files).toEqual([]);
+    expect(result.rulesCount).toBe(1);
+    expect(result.targets).toEqual(["cursor"]);
+    await expect(
+      access(join(repoRoot, ".cursor/rules/rubric.mdc"))
+    ).rejects.toThrow();
+  });
+
   it("preserves existing user content outside managed blocks", async () => {
     const repoRoot = await createRepoRoot();
     await writeFile(join(repoRoot, "AGENTS.md"), "# Existing\n\nKeep me.\n");
@@ -189,6 +213,26 @@ describe("compileRules", () => {
         config: config(["coderabbit" as CompileTarget])
       })
     ).rejects.toThrow(RubricError);
+  });
+
+  it("throws when an existing target path cannot be read as a file", async () => {
+    const repoRoot = await createRepoRoot();
+    await mkdir(join(repoRoot, "AGENTS.md"));
+
+    await expect(
+      compileRules({
+        repoRoot,
+        rules: [rule()],
+        config: config(["agents"])
+      })
+    ).rejects.toThrow(RubricError);
+    await expect(
+      compileRules({
+        repoRoot,
+        rules: [rule()],
+        config: config(["agents"])
+      })
+    ).rejects.toThrow("Unable to read");
   });
 });
 

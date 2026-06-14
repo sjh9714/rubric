@@ -27,7 +27,6 @@ export interface CompileCommandOptions {
   cwd?: string;
   target?: string[];
   dryRun?: boolean;
-  force?: boolean;
   debug?: boolean;
 }
 
@@ -43,7 +42,6 @@ export function addCompileCommand(program: Command): void {
     .option("--cwd <dir>", "working directory to compile")
     .option("--target <target>", "compile target", collectTargets, [])
     .option("--dry-run", "show what would be generated without writing files")
-    .option("--force", "refresh managed blocks in existing files")
     .option("--debug", "print stack traces for unexpected errors")
     .action(async (options: CompileCommandOptions) => {
       const exitCode = await runCompileCommand(options);
@@ -80,8 +78,7 @@ export async function runCompileCommand(
       rules,
       config,
       targets,
-      dryRun: options.dryRun === true,
-      force: options.force === true
+      dryRun: options.dryRun === true
     });
 
     stdout.write(
@@ -152,6 +149,10 @@ function renderCompileResult({
   dryRun: boolean;
 }): string {
   const lines = ["Rubric compile", ""];
+
+  if (files.length === 0 && rulesCount > 0) {
+    lines.push("No rules matched the requested compile targets.", "");
+  }
 
   if (dryRun) {
     lines.push("Dry run. No files were written.", "");

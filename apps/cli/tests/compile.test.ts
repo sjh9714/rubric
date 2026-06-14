@@ -28,6 +28,14 @@ afterEach(async () => {
 });
 
 describe("rubric compile", () => {
+  it("does not advertise --force in help", async () => {
+    const result = await runRubric(["compile", "--help"]);
+
+    expect(result.exitCode).toBe(0);
+    expect(result.stdout).toContain("Usage: rubric compile");
+    expect(result.stdout).not.toContain("--force");
+  });
+
   it("creates AGENTS.md and CLAUDE.md", async () => {
     const repo = await createRuleRepo({
       targets: ["agents", "claude"]
@@ -62,6 +70,28 @@ describe("rubric compile", () => {
       "API changes require tests"
     );
     await expect(access(join(repo, "CLAUDE.md"))).rejects.toThrow();
+  });
+
+  it("exits 0 without writing files when no rules match the requested target", async () => {
+    const repo = await createRuleRepo({
+      targets: ["agents"]
+    });
+
+    const result = await runRubric([
+      "compile",
+      "--cwd",
+      repo,
+      "--target",
+      "cursor"
+    ]);
+
+    expect(result.exitCode).toBe(0);
+    expect(result.stdout).toContain(
+      "No rules matched the requested compile targets."
+    );
+    await expect(
+      access(join(repo, ".cursor/rules/rubric.mdc"))
+    ).rejects.toThrow();
   });
 
   it("creates all target files for --target all", async () => {

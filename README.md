@@ -23,6 +23,7 @@ npx rubric init
 npx rubric add-pack --list
 npx rubric add-pack testing migrations security
 npx rubric check --base main
+npx rubric compile
 ```
 
 Implemented:
@@ -30,10 +31,10 @@ Implemented:
 - `rubric init`
 - `rubric add-pack`
 - `rubric check`
+- `rubric compile`
 
 Planned:
 
-- `rubric compile`
 - `rubric doctor`
 - `rubric demo`
 - GitHub PR history mining
@@ -46,6 +47,7 @@ Planned:
 npx rubric init
 npx rubric add-pack testing migrations security
 npx rubric check --base main
+npx rubric compile
 ```
 
 Core commands are local-first and do not require API keys.
@@ -72,6 +74,6 @@ pnpm --filter @rubric-dev/cli dev --help
 2. Add config and rule schemas.
 3. Collect git diffs and evaluate deterministic rules.
 4. Add built-in rule packs, generated GitHub workflow support, and `init`.
-5. Implement `compile`, `doctor`, and `demo`.
+5. Implement `doctor` and `demo`.
 
 Future milestones will add GitHub PR history mining, evidence-linked rule proposals, and optional LLM-assisted extraction.

@@ -23,7 +23,6 @@ export interface CompileRulesOptions {
   config: RubricConfig;
   targets?: CompileTarget[];
   dryRun?: boolean;
-  force?: boolean;
 }
 
 export type CompiledFileStatus =
@@ -84,6 +83,10 @@ export async function compileRules({
 
   for (const target of resolvedTargets) {
     const targetRules = sortedRules.filter((rule) => ruleTargets(rule, target));
+
+    if (targetRules.length === 0) {
+      continue;
+    }
 
     for (const targetFile of renderTargetFiles(target, targetRules)) {
       files.push(
@@ -200,7 +203,10 @@ async function compileTargetFile({
   const currentContents = existingContents ?? targetFile.baseContents ?? "";
   const nextContents = upsertManagedBlock(
     currentContents,
-    targetFile.managedContents
+    targetFile.managedContents,
+    {
+      path: targetFile.path
+    }
   );
 
   if (existingContents === nextContents) {
@@ -233,9 +239,18 @@ async function compileTargetFile({
 async function readFileIfExists(path: string): Promise<string | undefined> {
   try {
     return await readFile(path, "utf8");
-  } catch {
-    return undefined;
+  } catch (error) {
+    if (isNodeError(error) && error.code === "ENOENT") {
+      return undefined;
+    }
+
+    const message = error instanceof Error ? error.message : String(error);
+    throw new RubricError(`Unable to read ${path}: ${message}`);
   }
+}
+
+function isNodeError(error: unknown): error is NodeJS.ErrnoException {
+  return error instanceof Error && "code" in error;
 }
 
 function renderAgents(rules: RubricRule[]): string {

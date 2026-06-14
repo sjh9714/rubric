@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { RubricError } from "@rubric-dev/core";
 
 import { upsertManagedBlock } from "../src/managedBlock.js";
 
@@ -37,5 +38,46 @@ describe("managed blocks", () => {
     expect(upsertManagedBlock("# Existing", "Generated content")).toMatch(
       /\n$/
     );
+  });
+
+  it("throws when a begin marker has no end marker", () => {
+    expect(() =>
+      upsertManagedBlock(
+        "# Existing\n\n<!-- rubric:begin -->\nOld\n",
+        "New\n",
+        {
+          path: "AGENTS.md"
+        }
+      )
+    ).toThrow(RubricError);
+    expect(() =>
+      upsertManagedBlock(
+        "# Existing\n\n<!-- rubric:begin -->\nOld\n",
+        "New\n",
+        {
+          path: "AGENTS.md"
+        }
+      )
+    ).toThrow("malformed Rubric managed block");
+  });
+
+  it("throws when an end marker has no begin marker", () => {
+    expect(() =>
+      upsertManagedBlock("# Existing\n\nOld\n<!-- rubric:end -->\n", "New\n", {
+        path: "AGENTS.md"
+      })
+    ).toThrow("malformed Rubric managed block");
+  });
+
+  it("throws when an end marker appears before a begin marker", () => {
+    expect(() =>
+      upsertManagedBlock(
+        "# Existing\n\n<!-- rubric:end -->\nOld\n<!-- rubric:begin -->\n",
+        "New\n",
+        {
+          path: "AGENTS.md"
+        }
+      )
+    ).toThrow("malformed Rubric managed block");
   });
 });
