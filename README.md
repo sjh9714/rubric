@@ -2,64 +2,90 @@
 
 Preflight checks for AI-generated pull requests.
 
-Rubric will turn a team's repeated PR feedback into version-controlled rules, then help Claude, Codex, Copilot, Cursor, and human authors catch predictable issues before review.
+```bash
+npx @rubric-dev/cli demo
+```
 
-This repository is currently in bootstrap mode. The first milestone is a local-first TypeScript CLI with deterministic checks and no required API keys.
+Rubric helps teams turn review rules into local-first checks for Claude, Codex,
+Copilot, Cursor, and human PR authors.
 
-## Principles
+The npm package is `@rubric-dev/cli`; it installs the `rubric` binary.
 
-- Local-first core commands
-- No LLM calls by default
-- No telemetry by default
-- No AI code detection claims
-- No employee scoring or surveillance features
-- Deterministic policy findings may fail CI
-- Semantic or LLM findings default to warnings
-
-## Current CLI
+## Quickstart
 
 ```bash
 npx @rubric-dev/cli doctor
-npx @rubric-dev/cli demo
 npx @rubric-dev/cli init
-npx @rubric-dev/cli add-pack --list
-npx @rubric-dev/cli add-pack testing migrations security
-npx @rubric-dev/cli check --base main
 npx @rubric-dev/cli compile
+npx @rubric-dev/cli check --base main
 ```
 
-The package installs the `rubric` binary, so installed projects can run
-`rubric demo`, `rubric doctor`, and the other commands directly.
+After installation, use the `rubric` binary directly:
+
+```bash
+rubric demo
+rubric doctor
+rubric check --base main
+```
+
+## What it does
+
+- Initializes team review rules.
+- Adds built-in rule packs for testing, migrations, security, and Node.
+- Compiles rules into `AGENTS.md`, `CLAUDE.md`, GitHub Copilot instructions,
+  Cursor rules, and PR template blocks.
+- Checks PR diffs before review.
+- Runs locally without GitHub tokens or LLM API keys.
+
+## Commands
 
 Implemented:
 
-- `rubric doctor`
-- `rubric demo`
-- `rubric init`
-- `rubric add-pack`
-- `rubric check`
-- `rubric compile`
+| Command           | What it does                                                     |
+| ----------------- | ---------------------------------------------------------------- |
+| `rubric demo`     | Shows a zero-setup sample preflight report.                      |
+| `rubric doctor`   | Checks whether a repo is AI-agent ready.                         |
+| `rubric init`     | Creates starter Rubric config, rules, workflow, and PR template. |
+| `rubric add-pack` | Adds built-in rule packs.                                        |
+| `rubric compile`  | Generates agent instruction files and PR template blocks.        |
+| `rubric check`    | Checks the current diff against Rubric rules.                    |
+
+## Privacy
+
+Core commands are local-first.
+
+- No GitHub token required for `demo`, `doctor`, `init`, `add-pack`, `compile`,
+  or `check`.
+- No LLM API key required.
+- No telemetry by default.
+- No code is sent to external services by core commands.
+
+## Principles
+
+- Team review memory, not AI code detection.
+- Deterministic checks for predictable review feedback.
+- No employee scoring or surveillance features.
+- Semantic or LLM-assisted findings should default to warnings.
+
+## Not yet
 
 Planned:
 
-- GitHub PR history mining
-- evidence-linked rule proposals
-- optional LLM-assisted extraction
+- GitHub PR history mining.
+- Evidence-linked rule proposals.
+- Optional LLM-assisted extraction.
+- GitHub Action comment mode.
 
 ## Quick local usage
 
 ```bash
-npx @rubric-dev/cli doctor
 npx @rubric-dev/cli demo
+npx @rubric-dev/cli doctor
 npx @rubric-dev/cli init
 npx @rubric-dev/cli add-pack testing migrations security
-npx @rubric-dev/cli check --base main
 npx @rubric-dev/cli compile
+npx @rubric-dev/cli check --base main
 ```
-
-Core commands are local-first and do not require API keys.
-Until the first npm release, run locally with
-`pnpm --filter @rubric-dev/cli dev -- demo`.
 
 ## Development
 
@@ -74,15 +100,5 @@ pnpm lint
 Run the current CLI in development:
 
 ```bash
-pnpm --filter @rubric-dev/cli dev --help
+pnpm --filter @rubric-dev/cli dev -- demo
 ```
-
-## v0.1 Roadmap
-
-1. Bootstrap the TypeScript monorepo and CLI shell.
-2. Add config and rule schemas.
-3. Collect git diffs and evaluate deterministic rules.
-4. Add built-in rule packs, generated GitHub workflow support, and `init`.
-5. Add a zero-setup demo for first-run product value.
-
-Future milestones will add GitHub PR history mining, evidence-linked rule proposals, and optional LLM-assisted extraction.
