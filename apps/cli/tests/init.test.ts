@@ -14,6 +14,7 @@ import { fileURLToPath } from "node:url";
 import { promisify } from "node:util";
 
 import { afterEach, describe, expect, it } from "vitest";
+import { loadConfig } from "@rubric-dev/core";
 
 const execFileAsync = promisify(execFile);
 const workspaceRoot = fileURLToPath(new URL("../../..", import.meta.url));
@@ -38,9 +39,15 @@ describe("rubric init", () => {
     await expect(
       access(join(repo, ".rubric/config.yaml"))
     ).resolves.toBeUndefined();
-    await expect(read(repo, ".rubric/config.yaml")).resolves.toContain(
-      "default_base: main"
-    );
+    const configYaml = await read(repo, ".rubric/config.yaml");
+    const config = await loadConfig(repo);
+
+    expect(configYaml).toContain("project:\n  name: null");
+    expect(configYaml).toContain("modes:\n  check:");
+    expect(configYaml).toContain("fail_on:\n      - error");
+    expect(config.project.default_base).toBe("main");
+    expect(config.output.format).toBe("text");
+    expect(config.compile.targets).toContain("agents");
   });
 
   it("installs base and security packs by default", async () => {
@@ -175,7 +182,14 @@ describe("rubric init", () => {
       exitCode: 0
     });
 
-    await expect(read(repo, ".github/workflows/rubric.yml")).resolves.toContain(
+    const workflow = await read(repo, ".github/workflows/rubric.yml");
+
+    expect(workflow).toContain("on:\n  pull_request:");
+    expect(workflow).toContain("permissions:\n  contents: read");
+    expect(workflow).toContain("jobs:\n  rubric:");
+    expect(workflow).toContain("steps:\n      - uses: actions/checkout@v6");
+    expect(workflow).toContain("env:\n          RUBRIC_PR_TITLE:");
+    expect(workflow).toContain(
       "npx rubric check --base origin/${{ github.base_ref }} --format markdown"
     );
   });
@@ -187,9 +201,11 @@ describe("rubric init", () => {
       exitCode: 0
     });
 
-    await expect(
-      read(repo, ".github/pull_request_template.md")
-    ).resolves.toContain("## Rubric exceptions");
+    const template = await read(repo, ".github/pull_request_template.md");
+
+    expect(template).toContain("## Summary\n\n## Verification");
+    expect(template).toContain("Commands run:\n\n```text\n```");
+    expect(template).toContain("## Rubric exceptions");
   });
 
   it("makes rubric check fail for an API change without tests after init installs testing", async () => {

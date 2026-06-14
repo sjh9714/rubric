@@ -13,85 +13,89 @@ import { handleCliError } from "../errors/handleCliError.js";
 
 const defaultPacks = ["base", "security"];
 
-const starterConfig = `version: 1
+const starterConfig = template([
+  "version: 1",
+  "",
+  "project:",
+  "  name: null",
+  "  default_base: main",
+  "  package_manager: null",
+  "",
+  "modes:",
+  "  check:",
+  "    fail_on:",
+  "      - error",
+  "    warn_on:",
+  "      - warning",
+  "      - info",
+  "",
+  "compile:",
+  "  targets:",
+  "    - agents",
+  "    - claude",
+  "    - copilot",
+  "    - cursor",
+  "    - pr_template",
+  "  managed_header: true",
+  "",
+  "privacy:",
+  "  send_code_to_llm: false",
+  "  send_review_comments_to_llm: false",
+  "  redact_secrets: true",
+  "",
+  "output:",
+  "  format: text",
+  "  max_findings: 20"
+]);
 
-project:
-  name: null
-  default_base: main
-  package_manager: null
+const starterWorkflow = template([
+  "name: Rubric",
+  "",
+  "on:",
+  "  pull_request:",
+  "    types: [opened, synchronize, reopened, edited]",
+  "",
+  "permissions:",
+  "  contents: read",
+  "  pull-requests: read",
+  "",
+  "jobs:",
+  "  rubric:",
+  "    runs-on: ubuntu-24.04",
+  "    steps:",
+  "      - uses: actions/checkout@v6",
+  "        with:",
+  "          fetch-depth: 0",
+  "",
+  "      - uses: actions/setup-node@v6",
+  "        with:",
+  "          node-version: 20",
+  "",
+  "      - run: npx rubric check --base origin/${{ github.base_ref }} --format markdown",
+  "        env:",
+  "          RUBRIC_PR_TITLE: ${{ github.event.pull_request.title }}",
+  "          RUBRIC_PR_BODY: ${{ github.event.pull_request.body }}"
+]);
 
-modes:
-  check:
-    fail_on:
-      - error
-    warn_on:
-      - warning
-      - info
+const starterPullRequestTemplate = template([
+  "## Summary",
+  "",
+  "## Verification",
+  "",
+  "Commands run:",
+  "",
+  "```text",
+  "```",
+  "",
+  "## Rubric exceptions",
+  "",
+  "List any intentional rubric rule exceptions and why."
+]);
 
-compile:
-  targets:
-    - agents
-    - claude
-    - copilot
-    - cursor
-    - pr_template
-  managed_header: true
-
-privacy:
-  send_code_to_llm: false
-  send_review_comments_to_llm: false
-  redact_secrets: true
-
-output:
-  format: text
-  max_findings: 20
-`;
-
-const starterWorkflow = `name: Rubric
-
-on:
-  pull_request:
-    types: [opened, synchronize, reopened, edited]
-
-permissions:
-  contents: read
-  pull-requests: read
-
-jobs:
-  rubric:
-    runs-on: ubuntu-24.04
-    steps:
-      - uses: actions/checkout@v6
-        with:
-          fetch-depth: 0
-
-      - uses: actions/setup-node@v6
-        with:
-          node-version: 20
-
-      - run: npx rubric check --base origin/\${{ github.base_ref }} --format markdown
-        env:
-          RUBRIC_PR_TITLE: \${{ github.event.pull_request.title }}
-          RUBRIC_PR_BODY: \${{ github.event.pull_request.body }}
-`;
-
-const starterPullRequestTemplate = `## Summary
-
-## Verification
-
-Commands run:
-
-\`\`\`text
-\`\`\`
-
-## Rubric exceptions
-
-List any intentional rubric rule exceptions and why.
-`;
-
-const rubricGitignoreBlock = `# Rubric local cache
-.rubric/cache/
-`;
+const rubricGitignoreBlock = template([
+  "# Rubric local cache",
+  ".rubric/cache/"
+]);
 
 export interface InitCommandOptions {
   cwd?: string;
@@ -381,4 +385,8 @@ async function pathExists(path: string): Promise<boolean> {
   } catch {
     return false;
   }
+}
+
+function template(lines: string[]): string {
+  return `${lines.join("\n")}\n`;
 }
