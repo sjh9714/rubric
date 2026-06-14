@@ -14,7 +14,8 @@
     "typecheck": "tsc -p tsconfig.json --pretty false",
     "lint": "eslint .",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "unicode:check": "node scripts/scan-hidden-unicode.mjs"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

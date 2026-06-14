@@ -3,6 +3,7 @@ import { Command } from "commander";
 import { addAddPackCommand } from "./commands/addPack.js";
 import { addCheckCommand } from "./commands/check.js";
 import { addCompileCommand } from "./commands/compile.js";
+import { addDoctorCommand } from "./commands/doctor.js";
 import { addInitCommand } from "./commands/init.js";
 
 export const productDescription =
@@ -23,6 +24,7 @@ export function createCliProgram(): Command {
   addAddPackCommand(program);
   addCheckCommand(program);
   addCompileCommand(program);
+  addDoctorCommand(program);
   addInitCommand(program);
 
   return program;
