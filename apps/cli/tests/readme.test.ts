@@ -13,8 +13,10 @@ describe("README CLI status", () => {
       afterImplemented.split("Planned:");
     const [plannedSection = ""] = afterPlanned.split("## Quick local usage");
 
+    expect(implementedSection).toContain("`rubric demo`");
     expect(implementedSection).toContain("`rubric compile`");
     expect(implementedSection).toContain("`rubric doctor`");
+    expect(plannedSection).not.toContain("`rubric demo`");
     expect(plannedSection).not.toContain("`rubric compile`");
     expect(plannedSection).not.toContain("`rubric doctor`");
   });

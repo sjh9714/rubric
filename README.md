@@ -20,6 +20,7 @@ This repository is currently in bootstrap mode. The first milestone is a local-f
 
 ```bash
 npx rubric doctor
+npx rubric demo
 npx rubric init
 npx rubric add-pack --list
 npx rubric add-pack testing migrations security
@@ -30,6 +31,7 @@ npx rubric compile
 Implemented:
 
 - `rubric doctor`
+- `rubric demo`
 - `rubric init`
 - `rubric add-pack`
 - `rubric check`
@@ -37,7 +39,6 @@ Implemented:
 
 Planned:
 
-- `rubric demo`
 - GitHub PR history mining
 - evidence-linked rule proposals
 - optional LLM-assisted extraction
@@ -46,6 +47,7 @@ Planned:
 
 ```bash
 npx rubric doctor
+npx rubric demo
 npx rubric init
 npx rubric add-pack testing migrations security
 npx rubric check --base main
@@ -76,6 +78,6 @@ pnpm --filter @rubric-dev/cli dev --help
 2. Add config and rule schemas.
 3. Collect git diffs and evaluate deterministic rules.
 4. Add built-in rule packs, generated GitHub workflow support, and `init`.
-5. Implement `demo`.
+5. Add a zero-setup demo for first-run product value.
 
 Future milestones will add GitHub PR history mining, evidence-linked rule proposals, and optional LLM-assisted extraction.
