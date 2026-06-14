@@ -1,8 +1,17 @@
 {
   "name": "rubric",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "private": true,
   "description": "Preflight checks for AI-generated pull requests.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sjh9714/rubric.git"
+  },
+  "bugs": {
+    "url": "https://github.com/sjh9714/rubric/issues"
+  },
+  "homepage": "https://github.com/sjh9714/rubric#readme",
   "type": "module",
   "packageManager": "pnpm@10.34.3",
   "engines": {
@@ -15,7 +24,10 @@
     "lint": "eslint .",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "unicode:check": "node scripts/scan-hidden-unicode.mjs"
+    "unicode:check": "node scripts/scan-hidden-unicode.mjs",
+    "pack:cli": "pnpm --filter @rubric-dev/cli pack --pack-destination .artifacts",
+    "release:dry-run": "pnpm -r --filter @rubric-dev/core --filter @rubric-dev/compiler --filter @rubric-dev/packs --filter @rubric-dev/cli publish --dry-run --no-git-checks",
+    "smoke:package": "node scripts/smoke-package.mjs"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

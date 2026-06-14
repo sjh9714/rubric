@@ -1,12 +1,27 @@
 {
   "name": "@rubric-dev/packs",
-  "version": "0.0.0",
-  "private": true,
+  "version": "0.1.0",
   "description": "Built-in rule packs for rubric.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sjh9714/rubric.git",
+    "directory": "packages/packs"
+  },
+  "bugs": {
+    "url": "https://github.com/sjh9714/rubric/issues"
+  },
+  "homepage": "https://github.com/sjh9714/rubric#readme",
+  "keywords": [
+    "rubric",
+    "pull-request",
+    "ai",
+    "code-review"
+  ],
   "type": "module",
   "exports": {
     ".": {
-      "types": "./src/index.ts",
+      "types": "./dist/index.d.ts",
       "development": "./src/index.ts",
       "import": "./dist/index.js"
     }
@@ -15,12 +30,15 @@
     "dist",
     "builtins"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "build": "tsup src/index.ts --format esm --dts --clean",
     "test": "vitest run tests"
   },
   "dependencies": {
-    "@rubric-dev/core": "workspace:*",
+    "@rubric-dev/core": "workspace:^",
     "yaml": "^2.9.0",
     "zod": "^4.4.3"
   }

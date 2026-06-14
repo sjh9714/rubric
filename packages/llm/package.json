@@ -1,6 +1,6 @@
 {
   "name": "@rubric-dev/llm",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "private": true,
   "description": "Optional LLM interfaces for rubric.",
   "type": "module",

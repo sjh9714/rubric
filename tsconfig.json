@@ -1,7 +1,13 @@
 {
   "extends": "./tsconfig.base.json",
   "compilerOptions": {
-    "noEmit": true
+    "noEmit": true,
+    "baseUrl": ".",
+    "paths": {
+      "@rubric-dev/compiler": ["packages/compiler/src/index.ts"],
+      "@rubric-dev/core": ["packages/core/src/index.ts"],
+      "@rubric-dev/packs": ["packages/packs/src/index.ts"]
+    }
   },
   "include": ["apps/**/*.ts", "packages/**/*.ts", "vitest.config.ts"]
 }

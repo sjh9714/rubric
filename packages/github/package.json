@@ -1,6 +1,6 @@
 {
   "name": "@rubric-dev/github",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "private": true,
   "description": "GitHub integration helpers for rubric.",
   "type": "module",
