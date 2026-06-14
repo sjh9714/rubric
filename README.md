@@ -28,6 +28,33 @@ rubric doctor
 rubric check --base main
 ```
 
+## Example output
+
+```text
+Rubric demo
+
+Sample PR: Fix billing retry behavior
+
+Rules checked: 5
+Findings: 3
+
+[error] testing.required-for-api-change - API changes require tests
+  This PR changes API code but does not modify any test files.
+  Suggestion: Add or update tests covering the changed API behavior.
+
+[warning] db.destructive-migration-warning - Destructive database migration
+  This migration appears to contain a potentially destructive database operation.
+
+[warning] pr.too-broad - PR touches many directories
+  This PR changes files across many directories.
+
+Try it in your repo:
+- rubric doctor
+- rubric init
+- rubric compile
+- rubric check --base main
+```
+
 ## What it does
 
 - Initializes team review rules.

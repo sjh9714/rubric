@@ -39,6 +39,18 @@ describe("README CLI status", () => {
     expect(readme).toContain("## Not yet");
   });
 
+  it("shows a concise demo output example", async () => {
+    const readme = await readFile(`${workspaceRoot}/README.md`, "utf8");
+
+    expect(readme).toContain("## Example output");
+    expect(readme).toContain("Rubric demo");
+    expect(readme).toContain("Rules checked: 5");
+    expect(readme).toContain("Findings: 3");
+    expect(readme).toContain("testing.required-for-api-change");
+    expect(readme).toContain("db.destructive-migration-warning");
+    expect(readme).toContain("pr.too-broad");
+  });
+
   it("keeps launch markdown and tests encoded with real LF bytes", async () => {
     await expectLfTextFile("README.md", 70);
     await expectLfTextFile("apps/cli/tests/readme.test.ts", 20);
