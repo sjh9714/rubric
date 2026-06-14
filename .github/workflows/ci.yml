@@ -47,3 +47,6 @@ jobs:
 
       - name: Format check
         run: pnpm format:check
+
+      - name: Hidden Unicode check
+        run: pnpm unicode:check
