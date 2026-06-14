@@ -5,6 +5,27 @@ import { describe, expect, it } from "vitest";
 
 const workspaceRoot = fileURLToPath(new URL("../../..", import.meta.url));
 
+const hiddenCodePoints = [
+  0x2028, 0x2029, 0x200b, 0x200c, 0x200d, 0x200e, 0x200f, 0x061c, 0x202a,
+  0x202b, 0x202c, 0x202d, 0x202e, 0x2066, 0x2067, 0x2068, 0x2069, 0xfeff
+];
+
+async function expectLfTextFile(path: string, minimumLfCount: number) {
+  const bytes = await readFile(`${workspaceRoot}/${path}`);
+  const lfCount = Array.from(bytes).filter((byte) => byte === 0x0a).length;
+
+  expect(lfCount).toBeGreaterThanOrEqual(minimumLfCount);
+  expect(bytes.includes(0x0d)).toBe(false);
+  expect(bytes.at(-1)).toBe(0x0a);
+  expect(bytes.at(-2)).not.toBe(0x0a);
+
+  for (const codePoint of hiddenCodePoints) {
+    expect(bytes.includes(Buffer.from(String.fromCodePoint(codePoint)))).toBe(
+      false
+    );
+  }
+}
+
 describe("README CLI status", () => {
   it("keeps launch markdown readable with physical line breaks", async () => {
     const readme = await readFile(`${workspaceRoot}/README.md`, "utf8");
@@ -16,6 +37,11 @@ describe("README CLI status", () => {
     expect(readme).toMatch(/\| Command\s+\| What it does\s+\|/);
     expect(readme).toContain("## Privacy");
     expect(readme).toContain("## Not yet");
+  });
+
+  it("keeps launch markdown and tests encoded with real LF bytes", async () => {
+    await expectLfTextFile("README.md", 70);
+    await expectLfTextFile("apps/cli/tests/readme.test.ts", 20);
   });
 
   it("lists current commands as implemented instead of planned", async () => {
