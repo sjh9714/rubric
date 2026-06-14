@@ -9,3 +9,12 @@ export const packageInfo = {
   name: "@rubric-dev/compiler",
   status: "bootstrap"
 } as const satisfies PackageInfo;
+
+export {
+  compileRules,
+  type CompiledFileResult,
+  type CompiledFileStatus,
+  type CompileResult,
+  type CompileRulesOptions,
+  type CompileTarget
+} from "./compileRules.js";
