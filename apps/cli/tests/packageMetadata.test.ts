@@ -52,8 +52,23 @@ describe("publish package metadata", () => {
         "pnpm --filter @rubric-dev/cli pack --pack-destination .artifacts",
       "release:dry-run":
         "pnpm -r --filter @rubric-dev/core --filter @rubric-dev/compiler --filter @rubric-dev/packs --filter @rubric-dev/cli publish --dry-run --no-git-checks",
+      "release:dry-run:patch":
+        "pnpm -r --filter @rubric-dev/core --filter @rubric-dev/cli publish --dry-run --no-git-checks",
       "smoke:package": "node scripts/smoke-package.mjs"
     });
+
+    expect(pkg.scripts?.["release:dry-run:patch"]).toContain(
+      "--filter @rubric-dev/core"
+    );
+    expect(pkg.scripts?.["release:dry-run:patch"]).toContain(
+      "--filter @rubric-dev/cli"
+    );
+    expect(pkg.scripts?.["release:dry-run:patch"]).not.toContain(
+      "--filter @rubric-dev/compiler"
+    );
+    expect(pkg.scripts?.["release:dry-run:patch"]).not.toContain(
+      "--filter @rubric-dev/packs"
+    );
   });
 
   it("makes the CLI package publishable with the rubric binary", async () => {
