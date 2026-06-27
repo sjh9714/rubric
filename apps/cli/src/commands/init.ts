@@ -71,7 +71,7 @@ const starterWorkflow = template([
   "        with:",
   "          node-version: 20",
   "",
-  "      - run: npx rubric check --base origin/${{ github.base_ref }} --format markdown",
+  "      - run: npx --yes --package @rubric-dev/cli rubric check --base origin/${{ github.base_ref }} --format markdown",
   "        env:",
   "          RUBRIC_PR_TITLE: ${{ github.event.pull_request.title }}",
   "          RUBRIC_PR_BODY: ${{ github.event.pull_request.body }}"

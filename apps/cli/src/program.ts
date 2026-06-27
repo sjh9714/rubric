@@ -6,6 +6,7 @@ import { addCompileCommand } from "./commands/compile.js";
 import { addDemoCommand } from "./commands/demo.js";
 import { addDoctorCommand } from "./commands/doctor.js";
 import { addInitCommand } from "./commands/init.js";
+import { packageVersion } from "./version.js";
 
 export const productDescription =
   "Preflight checks for AI-generated pull requests.";
@@ -16,7 +17,7 @@ export function createCliProgram(): Command {
   program
     .name("rubric")
     .description(productDescription)
-    .version("0.0.0")
+    .version(packageVersion)
     .showHelpAfterError()
     .action(() => {
       program.outputHelp();

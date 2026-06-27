@@ -134,20 +134,27 @@ function evaluateRule(
     );
   }
 
-  const addedPatchText = getAddedPatchText(changeSet.patch);
-  const matchedAddedPatterns = (checks.added_patterns ?? []).filter((pattern) =>
-    matchesPatch(rule.id, pattern, addedPatchText)
+  const addedPatterns = checks.added_patterns ?? [];
+  const matchedAddedPatterns = matchAddedPatterns(
+    rule,
+    addedPatterns,
+    changeSet
   );
   if (matchedAddedPatterns.length > 0) {
+    const matchedFiles = Array.from(
+      new Set(matchedAddedPatterns.map((match) => match.path))
+    ).sort((a, b) => a.localeCompare(b));
+
     findings.push(
       createFinding({
         rule,
         config,
         id: `${rule.id}:added_patterns`,
-        files: sortedPaths(changeSet.files),
-        evidence: matchedAddedPatterns.map((pattern) => ({
+        files: matchedFiles,
+        evidence: matchedAddedPatterns.map((match) => ({
           kind: "added_pattern",
-          text: pattern
+          path: match.path,
+          text: match.pattern
         }))
       })
     );
@@ -168,9 +175,57 @@ function matchesPattern(path: string, pattern: string): boolean {
   return picomatch.isMatch(normalizePath(path), pattern, { dot: true });
 }
 
-function matchesPatch(ruleId: string, pattern: string, patch: string): boolean {
+interface AddedPatternMatch {
+  path: string;
+  pattern: string;
+}
+
+interface PatchFileAddedLines {
+  path: string;
+  text: string;
+}
+
+function matchAddedPatterns(
+  rule: RubricRule,
+  patterns: string[],
+  changeSet: ChangeSet
+): AddedPatternMatch[] {
+  if (patterns.length === 0) {
+    return [];
+  }
+
+  const regexes = patterns.map((pattern) => ({
+    pattern,
+    regex: createAddedPatternRegex(rule.id, pattern)
+  }));
+  const applicablePatchFiles = getAddedPatchFiles(changeSet.patch).filter(
+    (file) => matchesAny(file.path, rule.applies_to.paths)
+  );
+  const matches: AddedPatternMatch[] = [];
+
+  for (const file of applicablePatchFiles) {
+    for (const { pattern, regex } of regexes) {
+      regex.lastIndex = 0;
+
+      if (regex.test(file.text)) {
+        matches.push({
+          path: normalizePath(file.path),
+          pattern
+        });
+      }
+    }
+  }
+
+  return matches.sort(
+    (left, right) =>
+      left.path.localeCompare(right.path) ||
+      left.pattern.localeCompare(right.pattern)
+  );
+}
+
+function createAddedPatternRegex(ruleId: string, pattern: string): RegExp {
   try {
-    return new RegExp(pattern, "m").test(patch);
+    return new RegExp(pattern, "m");
   } catch (error) {
     throw new RubricError(
       `Invalid added_patterns regex for rule ${ruleId}: ${pattern}`,
@@ -179,12 +234,54 @@ function matchesPatch(ruleId: string, pattern: string, patch: string): boolean {
   }
 }
 
-function getAddedPatchText(patch: string): string {
-  return patch
-    .split(/\r?\n/)
-    .filter((line) => line.startsWith("+") && !line.startsWith("+++"))
-    .map((line) => line.slice(1))
-    .join("\n");
+function getAddedPatchFiles(patch: string): PatchFileAddedLines[] {
+  const files: Array<{ path: string; lines: string[] }> = [];
+  let currentFile: { path: string; lines: string[] } | undefined;
+
+  for (const line of patch.split(/\r?\n/)) {
+    if (line.startsWith("+++ ")) {
+      const path = parsePatchNewPath(line);
+
+      currentFile =
+        path === undefined
+          ? undefined
+          : {
+              path,
+              lines: []
+            };
+
+      if (currentFile !== undefined) {
+        files.push(currentFile);
+      }
+
+      continue;
+    }
+
+    if (
+      currentFile !== undefined &&
+      line.startsWith("+") &&
+      !line.startsWith("+++")
+    ) {
+      currentFile.lines.push(line.slice(1));
+    }
+  }
+
+  return files.map((file) => ({
+    path: normalizePath(file.path),
+    text: file.lines.join("\n")
+  }));
+}
+
+function parsePatchNewPath(line: string): string | undefined {
+  const rawPath = line.slice(4).trim();
+
+  if (rawPath === "/dev/null") {
+    return undefined;
+  }
+
+  const withoutPrefix = rawPath.startsWith("b/") ? rawPath.slice(2) : rawPath;
+
+  return normalizePath(withoutPrefix);
 }
 
 function includesSection(body: string, section: string): boolean {

@@ -150,7 +150,7 @@ describe("rubric init", () => {
       "version: 1"
     );
     await expect(read(repo, ".github/workflows/rubric.yml")).resolves.toContain(
-      "npx rubric check"
+      "npx --yes --package @rubric-dev/cli rubric check"
     );
     await expect(
       read(repo, ".github/pull_request_template.md")
@@ -190,7 +190,7 @@ describe("rubric init", () => {
     expect(workflow).toContain("steps:\n      - uses: actions/checkout@v6");
     expect(workflow).toContain("env:\n          RUBRIC_PR_TITLE:");
     expect(workflow).toContain(
-      "npx rubric check --base origin/${{ github.base_ref }} --format markdown"
+      "npx --yes --package @rubric-dev/cli rubric check --base origin/${{ github.base_ref }} --format markdown"
     );
   });
 

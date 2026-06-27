@@ -7,7 +7,6 @@ export const compileTargetSchema = z.enum([
   "claude",
   "copilot",
   "cursor",
-  "coderabbit",
   "pr_template"
 ]);
 

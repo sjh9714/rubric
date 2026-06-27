@@ -146,7 +146,7 @@ describe("rubric doctor", () => {
     await write(
       repo,
       ".github/workflows/rubric.yml",
-      "name: Rubric\njobs:\n  rubric:\n    steps:\n      - run: npx rubric check --base main\n"
+      "name: Rubric\njobs:\n  rubric:\n    steps:\n      - run: npx --yes --package @rubric-dev/cli rubric check --base main\n"
     );
     const result = await runRubric([
       "doctor",
