@@ -8,8 +8,9 @@ const repository = {
   type: "git",
   url: "git+https://github.com/sjh9714/rubric.git"
 };
+const patchReleaseVersion = "0.1.1";
+const initialReleaseVersion = "0.1.0";
 const commonPackageFields = {
-  version: "0.1.0",
   license: "MIT",
   repository,
   bugs: {
@@ -37,7 +38,7 @@ describe("publish package metadata", () => {
 
     expect(pkg).toMatchObject({
       name: "rubric",
-      version: "0.1.0",
+      version: patchReleaseVersion,
       private: true,
       license: "MIT",
       repository,
@@ -51,8 +52,23 @@ describe("publish package metadata", () => {
         "pnpm --filter @rubric-dev/cli pack --pack-destination .artifacts",
       "release:dry-run":
         "pnpm -r --filter @rubric-dev/core --filter @rubric-dev/compiler --filter @rubric-dev/packs --filter @rubric-dev/cli publish --dry-run --no-git-checks",
+      "release:dry-run:patch":
+        "pnpm -r --filter @rubric-dev/core --filter @rubric-dev/cli publish --dry-run --no-git-checks",
       "smoke:package": "node scripts/smoke-package.mjs"
     });
+
+    expect(pkg.scripts?.["release:dry-run:patch"]).toContain(
+      "--filter @rubric-dev/core"
+    );
+    expect(pkg.scripts?.["release:dry-run:patch"]).toContain(
+      "--filter @rubric-dev/cli"
+    );
+    expect(pkg.scripts?.["release:dry-run:patch"]).not.toContain(
+      "--filter @rubric-dev/compiler"
+    );
+    expect(pkg.scripts?.["release:dry-run:patch"]).not.toContain(
+      "--filter @rubric-dev/packs"
+    );
   });
 
   it("makes the CLI package publishable with the rubric binary", async () => {
@@ -61,6 +77,7 @@ describe("publish package metadata", () => {
     expect(pkg.private).toBeUndefined();
     expect(pkg).toMatchObject({
       name: "@rubric-dev/cli",
+      version: patchReleaseVersion,
       description: "CLI for rubric preflight checks.",
       ...commonPackageFields,
       repository: {
@@ -112,6 +129,10 @@ describe("publish package metadata", () => {
       expect(pkg.private).toBeUndefined();
       expect(pkg).toMatchObject({
         name: packagePath.name,
+        version:
+          packagePath.name === "@rubric-dev/core"
+            ? patchReleaseVersion
+            : initialReleaseVersion,
         ...commonPackageFields,
         repository: {
           ...repository,
@@ -147,6 +168,16 @@ describe("publish package metadata", () => {
       expect(pkg.private).toBe(true);
       expect(pkg.version).toBe("0.1.0");
     }
+  });
+
+  it("runs package smoke testing in CI", async () => {
+    const workflow = await readFile(
+      `${workspaceRoot}/.github/workflows/ci.yml`,
+      "utf8"
+    );
+
+    expect(workflow).toContain("Package smoke test");
+    expect(workflow).toContain("pnpm smoke:package");
   });
 });
 

@@ -181,6 +181,38 @@ describe("rubric check", () => {
     );
   });
 
+  it("treats --format github as markdown output", async () => {
+    const repo = await createApiRepo({
+      includeTest: false,
+      severity: "warning"
+    });
+
+    const result = await runRubric([
+      "check",
+      "--cwd",
+      repo,
+      "--base",
+      "master",
+      "--format",
+      "github"
+    ]);
+
+    expect(result.exitCode).toBe(0);
+    expect(result.stdout).toContain("| Severity | Rule | Message |");
+    expect(result.stdout).toContain(
+      "| warning | testing.required-for-api-change |"
+    );
+  });
+
+  it("mentions github in invalid format errors", async () => {
+    const repo = await createGitRepo();
+
+    const result = await runRubric(["check", "--cwd", repo, "--format", "xml"]);
+
+    expect(result.exitCode).toBe(2);
+    expect(result.stderr).toContain("text, json, markdown, or github");
+  });
+
   it("respects RUBRIC_PR_BODY", async () => {
     const repo = await createMigrationRepo();
 

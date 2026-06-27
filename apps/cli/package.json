@@ -1,6 +1,6 @@
 {
   "name": "@rubric-dev/cli",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "CLI for rubric preflight checks.",
   "license": "MIT",
   "repository": {

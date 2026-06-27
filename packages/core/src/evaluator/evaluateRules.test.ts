@@ -203,7 +203,7 @@ describe("evaluateRules", () => {
         })
       ],
       changeSet: changeSet([changedFile("src/api/users.ts")], {
-        patch: "+console.log('debug');\n"
+        patch: patchFor("src/api/users.ts", ["console.log('debug');"])
       }),
       config: defaultConfig()
     });
@@ -211,9 +211,11 @@ describe("evaluateRules", () => {
     expect(findings).toEqual([
       expect.objectContaining({
         id: "rule.required-tests:added_patterns",
+        files: ["src/api/users.ts"],
         evidence: [
           {
             kind: "added_pattern",
+            path: "src/api/users.ts",
             text: "console\\.log"
           }
         ]
@@ -231,8 +233,11 @@ describe("evaluateRules", () => {
         })
       ],
       changeSet: changeSet([changedFile("src/api/users.ts")], {
-        patch:
-          "-const token = 'sk-old-secret';\n+const token = process.env.API_KEY;\n"
+        patch: patchFor(
+          "src/api/users.ts",
+          ["const token = process.env.API_KEY;"],
+          ["const token = 'sk-old-secret';"]
+        )
       }),
       config: defaultConfig()
     });
@@ -250,13 +255,88 @@ describe("evaluateRules", () => {
         })
       ],
       changeSet: changeSet([changedFile("src/api/users.ts")], {
-        patch:
-          "diff --git a/src/api/users.ts b/src/api/users.ts\n--- a/src/api/users.ts\n+++ b/src/api/users.ts\n@@ -1 +1 @@\n+export const user = 'new';\n"
+        patch: patchFor("src/api/users.ts", ["export const user = 'new';"])
       }),
       config: defaultConfig()
     });
 
     expect(findings).toEqual([]);
+  });
+
+  it("matches added_patterns only in files matching applies_to.paths", async () => {
+    const findings = await evaluateRules({
+      rules: [
+        rule({
+          applies_to: {
+            paths: ["db/migrations/**"]
+          },
+          checks: {
+            added_patterns: ["DROP\\s+TABLE"]
+          }
+        })
+      ],
+      changeSet: changeSet(
+        [
+          changedFile("db/migrations/001_add_users.sql"),
+          changedFile("src/fixtures/destructive.sql")
+        ],
+        {
+          patch: [
+            patchFor("db/migrations/001_add_users.sql", [
+              "CREATE TABLE users (id integer primary key);"
+            ]),
+            patchFor("src/fixtures/destructive.sql", ["DROP TABLE users;"])
+          ].join("\n")
+        }
+      ),
+      config: defaultConfig()
+    });
+
+    expect(findings).toEqual([]);
+  });
+
+  it("reports only files where added_patterns matched", async () => {
+    const findings = await evaluateRules({
+      rules: [
+        rule({
+          applies_to: {
+            paths: ["db/migrations/**"]
+          },
+          checks: {
+            added_patterns: ["DROP\\s+TABLE"]
+          }
+        })
+      ],
+      changeSet: changeSet(
+        [
+          changedFile("db/migrations/001_add_users.sql"),
+          changedFile("db/migrations/002_drop_users.sql")
+        ],
+        {
+          patch: [
+            patchFor("db/migrations/001_add_users.sql", [
+              "CREATE TABLE users (id integer primary key);"
+            ]),
+            patchFor("db/migrations/002_drop_users.sql", ["DROP TABLE users;"])
+          ].join("\n")
+        }
+      ),
+      config: defaultConfig()
+    });
+
+    expect(findings).toEqual([
+      expect.objectContaining({
+        id: "rule.required-tests:added_patterns",
+        files: ["db/migrations/002_drop_users.sql"],
+        evidence: [
+          {
+            kind: "added_pattern",
+            path: "db/migrations/002_drop_users.sql",
+            text: "DROP\\s+TABLE"
+          }
+        ]
+      })
+    ]);
   });
 
   it("throws RubricError for invalid added_patterns regex", async () => {
@@ -477,4 +557,19 @@ function changedFile(
     isBinary: false,
     ...overrides
   };
+}
+
+function patchFor(
+  path: string,
+  addedLines: string[],
+  removedLines: string[] = []
+): string {
+  return [
+    `diff --git a/${path} b/${path}`,
+    `--- a/${path}`,
+    `+++ b/${path}`,
+    "@@ -1 +1 @@",
+    ...removedLines.map((line) => `-${line}`),
+    ...addedLines.map((line) => `+${line}`)
+  ].join("\n");
 }

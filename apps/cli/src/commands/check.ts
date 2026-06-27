@@ -41,7 +41,10 @@ export function addCheckCommand(program: Command): void {
     .option("--cwd <dir>", "working directory to inspect")
     .option("--base <ref>", "base git ref")
     .option("--head <ref>", "head git ref", "HEAD")
-    .option("--format <format>", "output format: text, json, or markdown")
+    .option(
+      "--format <format>",
+      "output format: text, json, markdown, or github"
+    )
     .option("--pr-title <title>", "pull request title metadata")
     .option(
       "--pr-body-file <path>",
@@ -161,20 +164,27 @@ function resolveOutputFormat(
   configFormat: RubricConfig["output"]["format"]
 ): CheckOutputFormat {
   if (requestedFormat !== undefined) {
-    if (isCheckOutputFormat(requestedFormat)) {
-      return requestedFormat;
+    if (isRequestedCheckOutputFormat(requestedFormat)) {
+      return requestedFormat === "github" ? "markdown" : requestedFormat;
     }
 
     throw new RubricError(
-      `Invalid check output format "${requestedFormat}". Expected text, json, or markdown.`
+      `Invalid check output format "${requestedFormat}". Expected text, json, markdown, or github.`
     );
   }
 
   return configFormat === "github" ? "markdown" : configFormat;
 }
 
-function isCheckOutputFormat(format: string): format is CheckOutputFormat {
-  return format === "text" || format === "json" || format === "markdown";
+function isRequestedCheckOutputFormat(
+  format: string
+): format is CheckOutputFormat | "github" {
+  return (
+    format === "text" ||
+    format === "json" ||
+    format === "markdown" ||
+    format === "github"
+  );
 }
 
 function renderReport(result: CheckResult, format: CheckOutputFormat): string {

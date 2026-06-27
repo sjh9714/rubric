@@ -1,3 +1,6 @@
+import { readFile } from "node:fs/promises";
+import { fileURLToPath } from "node:url";
+
 import { describe, expect, it } from "vitest";
 
 import {
@@ -5,6 +8,11 @@ import {
   normalizeCliArgv,
   productDescription
 } from "../src/program.js";
+import { packageVersion } from "../src/version.js";
+
+const packageJsonPath = fileURLToPath(
+  new URL("../package.json", import.meta.url)
+);
 
 describe("rubric CLI help", () => {
   it("renders help with the CLI name and product description", () => {
@@ -34,5 +42,14 @@ describe("rubric CLI help", () => {
       "rubric",
       "check"
     ]);
+  });
+
+  it("reports the CLI package version", async () => {
+    const packageJson = JSON.parse(await readFile(packageJsonPath, "utf8")) as {
+      version: string;
+    };
+
+    expect(packageVersion).toBe(packageJson.version);
+    expect(createCliProgram().version()).toBe(packageJson.version);
   });
 });
