@@ -2,7 +2,7 @@
   "name": "rubric",
   "version": "0.2.0",
   "private": true,
-  "description": "Preflight checks for AI-generated pull requests.",
+  "description": "Team review memory for AI-assisted development.",
   "license": "MIT",
   "repository": {
     "type": "git",

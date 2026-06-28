@@ -20,6 +20,9 @@ describe("@rubric-dev/action", () => {
       "utf8"
     );
 
+    expect(action).toContain(
+      "description: Run Rubric team review rules and post a sticky pull request comment."
+    );
     expect(action).toContain("runs:");
     expect(action).toContain("using: composite");
     expect(action).toContain("uses: actions/setup-node@v6");
