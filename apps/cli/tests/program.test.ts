@@ -20,6 +20,9 @@ describe("rubric CLI help", () => {
 
     expect(help).toContain("Usage: rubric");
     expect(help).toContain(productDescription);
+    expect(productDescription).toBe(
+      "Team review memory for AI-assisted development."
+    );
   });
 
   it("prints help when no arguments are provided", async () => {

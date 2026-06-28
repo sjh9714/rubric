@@ -9,7 +9,7 @@ import { addInitCommand } from "./commands/init.js";
 import { packageVersion } from "./version.js";
 
 export const productDescription =
-  "Preflight checks for AI-generated pull requests.";
+  "Team review memory for AI-assisted development.";
 
 export function createCliProgram(): Command {
   const program = new Command();

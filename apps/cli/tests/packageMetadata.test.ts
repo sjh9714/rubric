@@ -41,6 +41,7 @@ describe("publish package metadata", () => {
       name: "rubric",
       version: actionReleaseVersion,
       private: true,
+      description: "Team review memory for AI-assisted development.",
       license: "MIT",
       repository,
       bugs: {
@@ -79,7 +80,7 @@ describe("publish package metadata", () => {
     expect(pkg).toMatchObject({
       name: "@rubric-dev/cli",
       version: actionReleaseVersion,
-      description: "CLI for rubric preflight checks.",
+      description: "Team review memory CLI for AI-assisted development.",
       ...commonPackageFields,
       repository: {
         ...repository,

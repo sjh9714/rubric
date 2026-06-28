@@ -1,5 +1,5 @@
 name: Rubric
-description: Run Rubric preflight checks and post a sticky pull request comment.
+description: Run Rubric team review rules and post a sticky pull request comment.
 
 inputs:
   base:
