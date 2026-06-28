@@ -77,6 +77,32 @@ const starterWorkflow = template([
   "          RUBRIC_PR_BODY: ${{ github.event.pull_request.body }}"
 ]);
 
+const starterCommentWorkflow = template([
+  "name: Rubric",
+  "",
+  "on:",
+  "  pull_request:",
+  "    types: [opened, synchronize, reopened, edited]",
+  "",
+  "permissions:",
+  "  contents: read",
+  "  pull-requests: write",
+  "  issues: write",
+  "",
+  "jobs:",
+  "  rubric:",
+  "    runs-on: ubuntu-24.04",
+  "    steps:",
+  "      - uses: actions/checkout@v6",
+  "        with:",
+  "          fetch-depth: 0",
+  "",
+  "      - uses: sjh9714/rubric/packages/action@v0.2.0",
+  "        with:",
+  "          base: origin/${{ github.base_ref }}",
+  "          github-token: ${{ secrets.GITHUB_TOKEN }}"
+]);
+
 const starterPullRequestTemplate = template([
   "## Summary",
   "",
@@ -100,6 +126,7 @@ const rubricGitignoreBlock = template([
 export interface InitCommandOptions {
   cwd?: string;
   packs?: string[];
+  githubComment?: boolean;
   force?: boolean;
   dryRun?: boolean;
   debug?: boolean;
@@ -118,6 +145,7 @@ interface InitFileAction {
 interface InitResult {
   dryRun: boolean;
   files: InitFileAction[];
+  githubComment: boolean;
   rules: CopiedRule[];
   repoRoot: string;
 }
@@ -128,6 +156,10 @@ export function addInitCommand(program: Command): void {
     .description("Create a starter Rubric setup in this repository.")
     .option("--cwd <dir>", "working directory to initialize")
     .option("--packs <packs...>", "built-in packs to install")
+    .option(
+      "--github-comment",
+      "generate a GitHub Action workflow that comments on pull requests"
+    )
     .option("--force", "overwrite existing Rubric target files")
     .option("--dry-run", "show what would be created without writing files")
     .option("--debug", "print stack traces for unexpected errors")
@@ -151,6 +183,7 @@ export async function runInitCommand(
     const result = await initRubric({
       repoRoot,
       packNames,
+      githubComment: options.githubComment === true,
       force: options.force === true,
       dryRun: options.dryRun === true
     });
@@ -169,11 +202,13 @@ export async function runInitCommand(
 async function initRubric({
   repoRoot,
   packNames,
+  githubComment,
   force,
   dryRun
 }: {
   repoRoot: string;
   packNames: string[];
+  githubComment: boolean;
   force: boolean;
   dryRun: boolean;
 }): Promise<InitResult> {
@@ -202,7 +237,7 @@ async function initRubric({
     await writeTargetFile({
       repoRoot,
       path: ".github/workflows/rubric.yml",
-      contents: starterWorkflow,
+      contents: githubComment ? starterCommentWorkflow : starterWorkflow,
       force,
       dryRun
     })
@@ -221,6 +256,7 @@ async function initRubric({
   return {
     dryRun,
     files,
+    githubComment,
     rules: rules.copied,
     repoRoot
   };
@@ -317,6 +353,7 @@ function normalizePackNames(packNames: string[] | undefined): string[] {
 function renderInitResult({
   dryRun,
   files,
+  githubComment,
   rules,
   repoRoot
 }: InitResult): string {
@@ -332,6 +369,11 @@ function renderInitResult({
   if (dryRun) {
     lines.push("Dry run. No files were written.", "");
   }
+
+  lines.push(
+    `GitHub Action comment mode: ${githubComment ? "enabled" : "disabled"}`,
+    ""
+  );
 
   pushGroup(
     lines,

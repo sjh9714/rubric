@@ -8,6 +8,7 @@ const repository = {
   type: "git",
   url: "git+https://github.com/sjh9714/rubric.git"
 };
+const actionReleaseVersion = "0.2.0";
 const patchReleaseVersion = "0.1.1";
 const initialReleaseVersion = "0.1.0";
 const commonPackageFields = {
@@ -38,7 +39,7 @@ describe("publish package metadata", () => {
 
     expect(pkg).toMatchObject({
       name: "rubric",
-      version: patchReleaseVersion,
+      version: actionReleaseVersion,
       private: true,
       license: "MIT",
       repository,
@@ -77,7 +78,7 @@ describe("publish package metadata", () => {
     expect(pkg.private).toBeUndefined();
     expect(pkg).toMatchObject({
       name: "@rubric-dev/cli",
-      version: patchReleaseVersion,
+      version: actionReleaseVersion,
       description: "CLI for rubric preflight checks.",
       ...commonPackageFields,
       repository: {
@@ -157,9 +158,15 @@ describe("publish package metadata", () => {
     }
   });
 
+  it("keeps the repo-distributed action package private", async () => {
+    const pkg = await readJson("packages/action/package.json");
+
+    expect(pkg.private).toBe(true);
+    expect(pkg.version).toBe(actionReleaseVersion);
+  });
+
   it("keeps future integration packages private", async () => {
     for (const path of [
-      "packages/action/package.json",
       "packages/github/package.json",
       "packages/llm/package.json"
     ]) {
