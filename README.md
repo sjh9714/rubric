@@ -62,6 +62,7 @@ Try it in your repo:
 - Compiles rules into `AGENTS.md`, `CLAUDE.md`, GitHub Copilot instructions,
   Cursor rules, and PR template blocks.
 - Checks PR diffs before review.
+- Posts sticky GitHub Action comments when explicitly enabled.
 - Runs locally without GitHub tokens or LLM API keys.
 
 ## Commands
@@ -77,12 +78,33 @@ Implemented:
 | `rubric compile`  | Generates agent instruction files and PR template blocks.        |
 | `rubric check`    | Checks the current diff against Rubric rules.                    |
 
+GitHub Action comment mode is implemented as an opt-in workflow:
+
+```yaml
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+
+steps:
+  - uses: actions/checkout@v6
+    with:
+      fetch-depth: 0
+
+  - uses: sjh9714/rubric/packages/action@v0.2.0
+    with:
+      base: origin/${{ github.base_ref }}
+      github-token: ${{ secrets.GITHUB_TOKEN }}
+```
+
 ## Privacy
 
 Core commands are local-first.
 
 - No GitHub token required for `demo`, `doctor`, `init`, `add-pack`, `compile`,
   or `check`.
+- GitHub Action comment mode uses `GITHUB_TOKEN` only to create or update the
+  Rubric PR comment.
 - No LLM API key required.
 - No telemetry by default.
 - No code is sent to external services by core commands.
@@ -101,7 +123,6 @@ Planned:
 - GitHub PR history mining.
 - Evidence-linked rule proposals.
 - Optional LLM-assisted extraction.
-- GitHub Action comment mode.
 
 ## Quick local usage
 

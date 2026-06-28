@@ -66,9 +66,20 @@ describe("README CLI status", () => {
     expect(implementedSection).toContain("`rubric demo`");
     expect(implementedSection).toContain("`rubric compile`");
     expect(implementedSection).toContain("`rubric doctor`");
+    expect(implementedSection).toContain("GitHub Action comment mode");
     expect(plannedSection).not.toContain("`rubric demo`");
     expect(plannedSection).not.toContain("`rubric compile`");
     expect(plannedSection).not.toContain("`rubric doctor`");
+    expect(plannedSection).not.toContain("GitHub Action comment mode");
+  });
+
+  it("documents the GitHub Action comment workflow", async () => {
+    const readme = await readFile(`${workspaceRoot}/README.md`, "utf8");
+
+    expect(readme).toContain("sjh9714/rubric/packages/action@v0.2.0");
+    expect(readme).toContain("github-token: ${{ secrets.GITHUB_TOKEN }}");
+    expect(readme).toContain("pull-requests: write");
+    expect(readme).toContain("issues: write");
   });
 
   it("documents scoped npx usage and installed binary", async () => {

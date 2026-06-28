@@ -103,6 +103,24 @@ describe("rubric init", () => {
     await expect(access(join(repo, ".gitignore"))).rejects.toThrow();
   });
 
+  it("reports the GitHub comment workflow during dry runs", async () => {
+    const repo = await createGitRepo();
+
+    const result = await runRubric([
+      "init",
+      "--cwd",
+      repo,
+      "--github-comment",
+      "--dry-run"
+    ]);
+
+    expect(result.exitCode).toBe(0);
+    expect(result.stdout).toContain("Dry run. No files were written.");
+    expect(result.stdout).toContain("GitHub Action comment mode: enabled");
+    expect(result.stdout).toContain("created .github/workflows/rubric.yml");
+    await expect(access(join(repo, ".github"))).rejects.toThrow();
+  });
+
   it("skips existing config, workflow, and PR template by default", async () => {
     const repo = await createGitRepo();
     await write(repo, ".rubric/config.yaml", "version: old\n");
@@ -191,6 +209,46 @@ describe("rubric init", () => {
     expect(workflow).toContain("env:\n          RUBRIC_PR_TITLE:");
     expect(workflow).toContain(
       "npx --yes --package @rubric-dev/cli rubric check --base origin/${{ github.base_ref }} --format markdown"
+    );
+    expect(workflow).not.toContain("pull-requests: write");
+    expect(workflow).not.toContain("issues: write");
+    expect(workflow).not.toContain("sjh9714/rubric/packages/action@v0.2.0");
+  });
+
+  it("creates an opt-in GitHub Action comment workflow", async () => {
+    const repo = await createGitRepo();
+
+    await expect(
+      runRubric(["init", "--cwd", repo, "--github-comment"])
+    ).resolves.toMatchObject({
+      exitCode: 0
+    });
+
+    const workflow = await read(repo, ".github/workflows/rubric.yml");
+
+    expect(workflow).toContain("permissions:\n  contents: read");
+    expect(workflow).toContain("pull-requests: write");
+    expect(workflow).toContain("issues: write");
+    expect(workflow).toContain("uses: sjh9714/rubric/packages/action@v0.2.0");
+    expect(workflow).toContain("base: origin/${{ github.base_ref }}");
+    expect(workflow).toContain("github-token: ${{ secrets.GITHUB_TOKEN }}");
+  });
+
+  it("overwrites the workflow with comment mode when forced", async () => {
+    const repo = await createGitRepo();
+    await write(repo, ".github/workflows/rubric.yml", "name: Existing\n");
+
+    const result = await runRubric([
+      "init",
+      "--cwd",
+      repo,
+      "--github-comment",
+      "--force"
+    ]);
+
+    expect(result.exitCode).toBe(0);
+    await expect(read(repo, ".github/workflows/rubric.yml")).resolves.toContain(
+      "uses: sjh9714/rubric/packages/action@v0.2.0"
     );
   });
 
