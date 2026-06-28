@@ -78,7 +78,14 @@ Implemented:
 | `rubric compile`  | Generates agent instruction files and PR template blocks.        |
 | `rubric check`    | Checks the current diff against Rubric rules.                    |
 
-GitHub Action comment mode is implemented as an opt-in workflow:
+GitHub Action comment mode is implemented as an opt-in workflow. The easiest
+setup path is:
+
+```bash
+rubric init --github-comment
+```
+
+The generated workflow uses:
 
 ```yaml
 permissions:

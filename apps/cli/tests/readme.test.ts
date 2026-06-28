@@ -77,6 +77,7 @@ describe("README CLI status", () => {
     const readme = await readFile(`${workspaceRoot}/README.md`, "utf8");
 
     expect(readme).toContain("sjh9714/rubric/packages/action@v0.2.0");
+    expect(readme).toContain("rubric init --github-comment");
     expect(readme).toContain("github-token: ${{ secrets.GITHUB_TOKEN }}");
     expect(readme).toContain("pull-requests: write");
     expect(readme).toContain("issues: write");

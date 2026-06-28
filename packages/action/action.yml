@@ -32,6 +32,23 @@ inputs:
 runs:
   using: composite
   steps:
+    - name: Setup Node
+      uses: actions/setup-node@v6
+      with:
+        node-version: 20
+
+    - name: Validate GitHub comment token
+      shell: bash
+      env:
+        COMMENT_ENABLED: ${{ inputs.comment }}
+        GITHUB_TOKEN_INPUT: ${{ inputs.github-token }}
+      run: |
+        if [ "$COMMENT_ENABLED" = "true" ] && [ "$GITHUB_EVENT_NAME" = "pull_request" ] && [ -z "$GITHUB_TOKEN_INPUT" ]; then
+          echo "Rubric comment mode requires github-token on pull_request events."
+          echo "Set the github-token input or set comment: false."
+          exit 1
+        fi
+
     - name: Run Rubric
       shell: bash
       env:

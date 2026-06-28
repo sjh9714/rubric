@@ -22,6 +22,8 @@ describe("@rubric-dev/action", () => {
 
     expect(action).toContain("runs:");
     expect(action).toContain("using: composite");
+    expect(action).toContain("uses: actions/setup-node@v6");
+    expect(action).toContain("node-version: 20");
     expect(action).toContain(
       'npx --yes --package "@rubric-dev/cli@${RUBRIC_CLI_VERSION}" rubric check'
     );
@@ -39,6 +41,23 @@ describe("@rubric-dev/action", () => {
     expect(action).toContain("github.rest.issues.listComments");
     expect(action).toContain("github.rest.issues.updateComment");
     expect(action).toContain("github.rest.issues.createComment");
+  });
+
+  it("requires a token only when pull request comments are enabled", async () => {
+    const action = await readFile(
+      `${workspaceRoot}/packages/action/action.yml`,
+      "utf8"
+    );
+
+    expect(action).toContain("Validate GitHub comment token");
+    expect(action).toContain("COMMENT_ENABLED: ${{ inputs.comment }}");
+    expect(action).toContain("GITHUB_TOKEN_INPUT: ${{ inputs.github-token }}");
+    expect(action).toContain(
+      'if [ "$COMMENT_ENABLED" = "true" ] && [ "$GITHUB_EVENT_NAME" = "pull_request" ] && [ -z "$GITHUB_TOKEN_INPUT" ]; then'
+    );
+    expect(action).toContain(
+      "Set the github-token input or set comment: false."
+    );
   });
 
   it("fails after commenting when blocking findings are configured to fail", async () => {
