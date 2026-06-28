@@ -1,32 +1,47 @@
 # rubric
 
-Preflight checks for AI-generated pull requests.
+Team review memory for AI-assisted development.
+
+Rubric turns repeated PR feedback into version-controlled review rules
+that humans, coding agents, and CI can all run before review.
+
+It is not an AI code detector.
+It is not another linter.
+It is a way to keep your team's review standards from disappearing
+as more code is written by agents.
 
 ```bash
 npx @rubric-dev/cli demo
 ```
 
-Rubric helps teams turn review rules into local-first checks for Claude, Codex,
-Copilot, Cursor, and human PR authors.
-
 The npm package is `@rubric-dev/cli`; it installs the `rubric` binary.
 
-## Quickstart
+## The problem
 
-```bash
-npx @rubric-dev/cli doctor
-npx @rubric-dev/cli init
-npx @rubric-dev/cli compile
-npx @rubric-dev/cli check --base main
-```
+Your team keeps leaving the same PR comments:
 
-After installation, use the `rubric` binary directly:
+- "API changes need tests."
+- "Destructive migrations need rollback notes."
+- "Please list verification commands."
+- "This PR is too broad."
 
-```bash
-rubric demo
-rubric doctor
-rubric check --base main
-```
+With AI coding agents, these repeated misses happen faster.
+
+Rubric lets you turn those comments into rules, commit them to the repo, and
+share them with Claude, Codex, Copilot, Cursor, CI, and human authors.
+
+## How Rubric works
+
+Rubric keeps review expectations in `.rubric/rules` so the same standards can
+show up before review:
+
+- A repeated review comment becomes a YAML rule.
+- `rubric compile` publishes those rules into agent and PR instructions.
+- `rubric check` evaluates the current diff before review.
+- GitHub Action comment mode can deliver the same report as a sticky PR comment.
+
+The sticky comment is delivery. The product is the review memory your team keeps
+in the repo.
 
 ## Example output
 
@@ -55,15 +70,31 @@ Try it in your repo:
 - rubric check --base main
 ```
 
-## What it does
+## Team workflow
 
-- Initializes team review rules.
-- Adds built-in rule packs for testing, migrations, security, and Node.
-- Compiles rules into `AGENTS.md`, `CLAUDE.md`, GitHub Copilot instructions,
-  Cursor rules, and PR template blocks.
-- Checks PR diffs before review.
-- Posts sticky GitHub Action comments when explicitly enabled.
-- Runs locally without GitHub tokens or LLM API keys.
+1. Pick a few recent PRs.
+2. Find the review comments your team keeps repeating.
+3. Convert the top rules into `.rubric/rules`.
+4. Run `rubric compile` so agents and humans see the same standards.
+5. Run `rubric check` before opening the next PR.
+6. Review which rules fired in your next team retro.
+
+## Quickstart
+
+```bash
+npx @rubric-dev/cli doctor
+npx @rubric-dev/cli init
+npx @rubric-dev/cli compile
+npx @rubric-dev/cli check --base main
+```
+
+After installation, use the `rubric` binary directly:
+
+```bash
+rubric demo
+rubric doctor
+rubric check --base main
+```
 
 ## Commands
 
@@ -78,8 +109,8 @@ Implemented:
 | `rubric compile`  | Generates agent instruction files and PR template blocks.        |
 | `rubric check`    | Checks the current diff against Rubric rules.                    |
 
-GitHub Action comment mode is implemented as an opt-in workflow. The easiest
-setup path is:
+GitHub Action comment mode is implemented as an opt-in delivery path. The
+easiest setup path is:
 
 ```bash
 rubric init --github-comment
@@ -127,8 +158,8 @@ Core commands are local-first.
 
 Planned:
 
-- GitHub PR history mining.
-- Evidence-linked rule proposals.
+- GitHub PR history mining (#15).
+- Evidence-linked rule proposals (#14).
 - Optional LLM-assisted extraction.
 
 ## Quick local usage

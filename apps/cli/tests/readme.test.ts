@@ -32,11 +32,23 @@ describe("README CLI status", () => {
     const physicalLines = readme.split(/\r?\n/);
 
     expect(physicalLines.length).toBeGreaterThanOrEqual(40);
-    expect(readme).toContain("# rubric\n\nPreflight checks");
+    expect(readme).toContain("# rubric\n\nTeam review memory");
     expect(readme).toContain("```bash\nnpx @rubric-dev/cli demo\n```");
     expect(readme).toMatch(/\| Command\s+\| What it does\s+\|/);
     expect(readme).toContain("## Privacy");
     expect(readme).toContain("## Not yet");
+  });
+
+  it("positions Rubric as team review memory", async () => {
+    const readme = await readFile(`${workspaceRoot}/README.md`, "utf8");
+
+    expect(readme).toContain("Team review memory for AI-assisted development.");
+    expect(readme).toContain("It is not an AI code detector.");
+    expect(readme).toContain("It is not another linter.");
+    expect(readme).toContain("## The problem");
+    expect(readme).toContain("## How Rubric works");
+    expect(readme).toContain("## Team workflow");
+    expect(readme).toContain("The sticky comment is delivery.");
   });
 
   it("shows a concise demo output example", async () => {
