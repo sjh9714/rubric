@@ -64,7 +64,7 @@ rubric check --base main
 ```
 
 That flow drafts `.rubric/rules/proposed.api-changes-need-tests.yaml`,
-publishes the same rule into agent and PR instructions, and checks the next diff
+publishes the rule into configured agent instructions, and checks the next diff
 before review.
 
 ## How Rubric works

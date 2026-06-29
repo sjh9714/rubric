@@ -82,7 +82,7 @@ describe("README CLI status", () => {
       ".rubric/rules/proposed.api-changes-need-tests.yaml"
     );
     expect(readme).toContain(
-      "publishes the same rule into agent and PR instructions"
+      "publishes the rule into configured agent instructions"
     );
     expect(readme).toContain("checks the next diff");
   });
