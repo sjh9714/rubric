@@ -1,24 +1,26 @@
-# rubric
+# Rubric
+
+Your team keeps leaving the same PR comments.
+
+Rubric turns repeated PR feedback into repo rules that humans, coding agents,
+and CI can run before review.
+
+```bash
+npx --yes @rubric-dev/cli demo
+```
+
+The npm package is `@rubric-dev/cli`; it installs the `rubric` binary.
 
 Team review memory for AI-assisted development.
-
-Rubric turns repeated PR feedback into version-controlled review rules
-that humans, coding agents, and CI can all run before review.
 
 It is not an AI code detector.
 It is not another linter.
 It is a way to keep your team's review standards from disappearing
 as more code is written by agents.
 
-```bash
-npx @rubric-dev/cli demo
-```
-
-The npm package is `@rubric-dev/cli`; it installs the `rubric` binary.
-
 ## The problem
 
-Your team keeps leaving the same PR comments:
+Team review memory usually lives in repeated comments:
 
 - "API changes need tests."
 - "Destructive migrations need rollback notes."
@@ -29,6 +31,29 @@ With AI coding agents, these repeated misses happen faster.
 
 Rubric lets you turn those comments into rules, commit them to the repo, and
 share them with Claude, Codex, Copilot, Cursor, CI, and human authors.
+
+## Before Rubric
+
+```text
+Reviewer: "API changes need tests."
+Reviewer: "Please document the rollback plan."
+Reviewer: "What commands did you run?"
+```
+
+## After Rubric
+
+```bash
+rubric check --base main
+```
+
+Rubric catches repeated feedback before review and compiles the same rules into:
+
+- AGENTS.md
+- CLAUDE.md
+- GitHub Copilot instructions
+- Cursor rules
+- PR templates
+- GitHub Actions
 
 ## How Rubric works
 

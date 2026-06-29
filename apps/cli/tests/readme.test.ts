@@ -32,8 +32,10 @@ describe("README CLI status", () => {
     const physicalLines = readme.split(/\r?\n/);
 
     expect(physicalLines.length).toBeGreaterThanOrEqual(40);
-    expect(readme).toContain("# rubric\n\nTeam review memory");
-    expect(readme).toContain("```bash\nnpx @rubric-dev/cli demo\n```");
+    expect(readme).toContain(
+      "# Rubric\n\nYour team keeps leaving the same PR comments."
+    );
+    expect(readme).toContain("```bash\nnpx --yes @rubric-dev/cli demo\n```");
     expect(readme).toMatch(/\| Command\s+\| What it does\s+\|/);
     expect(readme).toContain("## Privacy");
     expect(readme).toContain("## Not yet");
@@ -42,6 +44,9 @@ describe("README CLI status", () => {
   it("positions Rubric as team review memory", async () => {
     const readme = await readFile(`${workspaceRoot}/README.md`, "utf8");
 
+    expect(readme).toContain(
+      "Rubric turns repeated PR feedback into repo rules"
+    );
     expect(readme).toContain("Team review memory for AI-assisted development.");
     expect(readme).toContain("It is not an AI code detector.");
     expect(readme).toContain("It is not another linter.");
@@ -49,6 +54,19 @@ describe("README CLI status", () => {
     expect(readme).toContain("## How Rubric works");
     expect(readme).toContain("## Team workflow");
     expect(readme).toContain("The sticky comment is delivery.");
+  });
+
+  it("shows the before and after repeated-feedback workflow", async () => {
+    const readme = await readFile(`${workspaceRoot}/README.md`, "utf8");
+
+    expect(readme).toContain("## Before Rubric");
+    expect(readme).toContain('Reviewer: "API changes need tests."');
+    expect(readme).toContain('Reviewer: "Please document the rollback plan."');
+    expect(readme).toContain("## After Rubric");
+    expect(readme).toContain("rubric check --base main");
+    expect(readme).toContain("Rubric catches repeated feedback before review");
+    expect(readme).toContain("AGENTS.md");
+    expect(readme).toContain("GitHub Actions");
   });
 
   it("shows a concise demo output example", async () => {
