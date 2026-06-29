@@ -69,6 +69,24 @@ describe("README CLI status", () => {
     expect(readme).toContain("GitHub Actions");
   });
 
+  it("shows the propose-to-check workflow", async () => {
+    const readme = await readFile(`${workspaceRoot}/README.md`, "utf8");
+
+    expect(readme).toContain("## From comment to check");
+    expect(readme).toContain(
+      'rubric propose --from-text "API changes need tests" --write'
+    );
+    expect(readme).toContain("rubric compile");
+    expect(readme).toContain("rubric check --base main");
+    expect(readme).toContain(
+      ".rubric/rules/proposed.api-changes-need-tests.yaml"
+    );
+    expect(readme).toContain(
+      "publishes the same rule into agent and PR instructions"
+    );
+    expect(readme).toContain("checks the next diff");
+  });
+
   it("shows a concise demo output example", async () => {
     const readme = await readFile(`${workspaceRoot}/README.md`, "utf8");
 
