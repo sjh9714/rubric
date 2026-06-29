@@ -97,7 +97,7 @@ const starterCommentWorkflow = template([
   "        with:",
   "          fetch-depth: 0",
   "",
-  "      - uses: sjh9714/rubric/packages/action@v0.2.0",
+  "      - uses: sjh9714/rubric/packages/action@v0.2.1",
   "        with:",
   "          base: origin/${{ github.base_ref }}",
   "          github-token: ${{ secrets.GITHUB_TOKEN }}"
@@ -396,8 +396,9 @@ function renderInitResult({
   lines.push(
     "",
     "Next:",
-    "  rubric check --base main",
-    "  rubric add-pack testing migrations"
+    "  1. Edit .rubric/rules to capture one repeated team review comment.",
+    "  2. Run rubric compile to publish it to agent and PR instructions.",
+    "  3. Run rubric check --base main before your next PR."
   );
 
   return lines.join("\n");

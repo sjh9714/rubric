@@ -1,6 +1,6 @@
 {
   "name": "@rubric-dev/cli",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Team review memory CLI for AI-assisted development.",
   "license": "MIT",
   "repository": {

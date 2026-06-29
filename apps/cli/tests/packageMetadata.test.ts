@@ -8,7 +8,7 @@ const repository = {
   type: "git",
   url: "git+https://github.com/sjh9714/rubric.git"
 };
-const actionReleaseVersion = "0.2.0";
+const actionReleaseVersion = "0.2.1";
 const patchReleaseVersion = "0.1.1";
 const initialReleaseVersion = "0.1.0";
 const commonPackageFields = {
@@ -164,6 +164,18 @@ describe("publish package metadata", () => {
 
     expect(pkg.private).toBe(true);
     expect(pkg.version).toBe(actionReleaseVersion);
+  });
+
+  it("keeps AGENTS guidance aligned with review memory positioning", async () => {
+    const agents = await readFile(`${workspaceRoot}/AGENTS.md`, "utf8");
+
+    expect(agents).toContain("team review memory in AI-assisted development");
+    expect(agents).toContain(
+      "Rubric turns repeated PR feedback into version-controlled rules"
+    );
+    expect(agents).not.toContain(
+      "preflight checks on AI-generated pull requests"
+    );
   });
 
   it("keeps future integration packages private", async () => {

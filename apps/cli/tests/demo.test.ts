@@ -34,6 +34,10 @@ describe("rubric demo", () => {
     expect(result.stdout).toContain("testing.required-for-api-change");
     expect(result.stdout).toContain("db.destructive-migration-warning");
     expect(result.stdout).toContain("pr.too-broad");
+    expect(result.stdout).toContain(
+      "review feedback your team would otherwise repeat by hand"
+    );
+    expect(result.stdout).toContain("shares the same rules with agents and CI");
     expect(result.stdout).toContain("Try it in your repo");
   });
 

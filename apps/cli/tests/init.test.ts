@@ -36,6 +36,15 @@ describe("rubric init", () => {
 
     expect(result.exitCode).toBe(0);
     expect(result.stdout).toContain("Created:");
+    expect(result.stdout).toContain(
+      "Edit .rubric/rules to capture one repeated team review comment."
+    );
+    expect(result.stdout).toContain(
+      "Run rubric compile to publish it to agent and PR instructions."
+    );
+    expect(result.stdout).toContain(
+      "Run rubric check --base main before your next PR."
+    );
     await expect(
       access(join(repo, ".rubric/config.yaml"))
     ).resolves.toBeUndefined();
@@ -212,7 +221,7 @@ describe("rubric init", () => {
     );
     expect(workflow).not.toContain("pull-requests: write");
     expect(workflow).not.toContain("issues: write");
-    expect(workflow).not.toContain("sjh9714/rubric/packages/action@v0.2.0");
+    expect(workflow).not.toContain("sjh9714/rubric/packages/action@v0.2.1");
   });
 
   it("creates an opt-in GitHub Action comment workflow", async () => {
@@ -229,7 +238,7 @@ describe("rubric init", () => {
     expect(workflow).toContain("permissions:\n  contents: read");
     expect(workflow).toContain("pull-requests: write");
     expect(workflow).toContain("issues: write");
-    expect(workflow).toContain("uses: sjh9714/rubric/packages/action@v0.2.0");
+    expect(workflow).toContain("uses: sjh9714/rubric/packages/action@v0.2.1");
     expect(workflow).toContain("base: origin/${{ github.base_ref }}");
     expect(workflow).toContain("github-token: ${{ secrets.GITHUB_TOKEN }}");
   });
@@ -248,7 +257,7 @@ describe("rubric init", () => {
 
     expect(result.exitCode).toBe(0);
     await expect(read(repo, ".github/workflows/rubric.yml")).resolves.toContain(
-      "uses: sjh9714/rubric/packages/action@v0.2.0"
+      "uses: sjh9714/rubric/packages/action@v0.2.1"
     );
   });
 
