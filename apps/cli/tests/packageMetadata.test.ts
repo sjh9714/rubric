@@ -8,8 +8,8 @@ const repository = {
   type: "git",
   url: "git+https://github.com/sjh9714/rubric.git"
 };
-const actionReleaseVersion = "0.3.0";
-const patchReleaseVersion = "0.1.1";
+const actionReleaseVersion = "0.3.1";
+const patchReleaseVersion = "0.1.2";
 const initialReleaseVersion = "0.1.0";
 const commonPackageFields = {
   license: "MIT",

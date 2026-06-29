@@ -30,7 +30,7 @@ describe("@rubric-dev/action", () => {
     expect(action).toContain(
       'npx --yes --package "@rubric-dev/cli@${RUBRIC_CLI_VERSION}" rubric check'
     );
-    expect(action).toContain('default: "0.3.0"');
+    expect(action).toContain('default: "0.3.1"');
   });
 
   it("posts or updates one sticky PR comment", async () => {

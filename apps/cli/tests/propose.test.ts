@@ -55,7 +55,8 @@ describe("rubric propose", () => {
       },
       evidence: {
         source: "manual",
-        confidence: 0.5
+        confidence: 0.5,
+        quote: "API changes need tests"
       }
     });
   });
@@ -98,6 +99,7 @@ describe("rubric propose", () => {
       "Created:\n  .rubric/rules/proposed.api-changes-need-tests.yaml"
     );
     expect(rule.id).toBe("proposed.api-changes-need-tests");
+    expect(rule.evidence.quote).toBe("API changes need tests");
   });
 
   it("fails safely when the proposal file already exists", async () => {

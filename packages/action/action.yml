@@ -27,7 +27,7 @@ inputs:
   cli-version:
     description: Version of @rubric-dev/cli to run.
     required: false
-    default: "0.3.0"
+    default: "0.3.1"
 
 runs:
   using: composite

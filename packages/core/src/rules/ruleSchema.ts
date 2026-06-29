@@ -50,6 +50,7 @@ export const rubricRuleSchema = z.object({
         .enum(["manual", "github_pr_history", "generated"])
         .default("manual"),
       confidence: z.number().min(0).max(1).default(0.5),
+      quote: z.string().min(1).optional(),
       file: z.string().optional()
     })
     .default({ source: "manual", confidence: 0.5 })
