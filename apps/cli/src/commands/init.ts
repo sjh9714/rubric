@@ -97,7 +97,7 @@ const starterCommentWorkflow = template([
   "        with:",
   "          fetch-depth: 0",
   "",
-  "      - uses: sjh9714/rubric/packages/action@v0.3.0",
+  "      - uses: sjh9714/rubric/packages/action@v0.3.1",
   "        with:",
   "          base: origin/${{ github.base_ref }}",
   "          github-token: ${{ secrets.GITHUB_TOKEN }}"

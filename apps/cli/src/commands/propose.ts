@@ -109,7 +109,8 @@ function createProposalFromText(fromText: string | undefined): Proposal {
     },
     evidence: {
       source: "manual",
-      confidence: 0.5
+      confidence: 0.5,
+      quote: text
     }
   });
   if (!parsedRule.success) {

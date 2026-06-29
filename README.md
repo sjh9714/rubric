@@ -153,6 +153,7 @@ Draft a local rule from one repeated review comment:
 rubric propose --from-text "API changes need tests"
 ```
 
+Local proposals preserve the source comment as `evidence.quote`.
 Historical GitHub PR review mining is planned, not implemented yet.
 
 GitHub Action comment mode is implemented as an opt-in delivery path. The
@@ -175,7 +176,7 @@ steps:
     with:
       fetch-depth: 0
 
-  - uses: sjh9714/rubric/packages/action@v0.3.0
+  - uses: sjh9714/rubric/packages/action@v0.3.1
     with:
       base: origin/${{ github.base_ref }}
       github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -205,7 +206,8 @@ Core commands are local-first.
 Planned:
 
 - GitHub PR history mining (#15).
-- Evidence-linked rule proposals (#14).
+- Evidence-linked rule proposals with history links and `.rubric/evidence`
+  storage (#14).
 - Optional LLM-assisted extraction.
 
 ## Quick local usage
