@@ -6,6 +6,7 @@ import { addCompileCommand } from "./commands/compile.js";
 import { addDemoCommand } from "./commands/demo.js";
 import { addDoctorCommand } from "./commands/doctor.js";
 import { addInitCommand } from "./commands/init.js";
+import { addProposeCommand } from "./commands/propose.js";
 import { packageVersion } from "./version.js";
 
 export const productDescription =
@@ -29,6 +30,7 @@ export function createCliProgram(): Command {
   addDemoCommand(program);
   addDoctorCommand(program);
   addInitCommand(program);
+  addProposeCommand(program);
 
   return program;
 }

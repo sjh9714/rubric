@@ -94,19 +94,22 @@ describe("README CLI status", () => {
     const [plannedSection = ""] = afterPlanned.split("## Quick local usage");
 
     expect(implementedSection).toContain("`rubric demo`");
+    expect(implementedSection).toContain("`rubric propose`");
     expect(implementedSection).toContain("`rubric compile`");
     expect(implementedSection).toContain("`rubric doctor`");
     expect(implementedSection).toContain("GitHub Action comment mode");
     expect(plannedSection).not.toContain("`rubric demo`");
+    expect(plannedSection).not.toContain("`rubric propose`");
     expect(plannedSection).not.toContain("`rubric compile`");
     expect(plannedSection).not.toContain("`rubric doctor`");
     expect(plannedSection).not.toContain("GitHub Action comment mode");
+    expect(plannedSection).toContain("GitHub PR history mining");
   });
 
   it("documents the GitHub Action comment workflow", async () => {
     const readme = await readFile(`${workspaceRoot}/README.md`, "utf8");
 
-    expect(readme).toContain("sjh9714/rubric/packages/action@v0.2.1");
+    expect(readme).toContain("sjh9714/rubric/packages/action@v0.3.0");
     expect(readme).toContain("rubric init --github-comment");
     expect(readme).toContain("github-token: ${{ secrets.GITHUB_TOKEN }}");
     expect(readme).toContain("pull-requests: write");
@@ -117,6 +120,9 @@ describe("README CLI status", () => {
     const readme = await readFile(`${workspaceRoot}/README.md`, "utf8");
 
     expect(readme).toContain("npx @rubric-dev/cli demo");
+    expect(readme).toContain(
+      'npx @rubric-dev/cli propose --from-text "API changes need tests"'
+    );
     expect(readme).toContain("installs the `rubric` binary");
     expect(readme).toContain("pnpm --filter @rubric-dev/cli dev -- demo");
     expect(readme).not.toContain("npx rubric demo");

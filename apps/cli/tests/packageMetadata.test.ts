@@ -8,7 +8,7 @@ const repository = {
   type: "git",
   url: "git+https://github.com/sjh9714/rubric.git"
 };
-const actionReleaseVersion = "0.2.1";
+const actionReleaseVersion = "0.3.0";
 const patchReleaseVersion = "0.1.1";
 const initialReleaseVersion = "0.1.0";
 const commonPackageFields = {
@@ -97,7 +97,8 @@ describe("publish package metadata", () => {
     expect(pkg.dependencies).toMatchObject({
       "@rubric-dev/compiler": "workspace:^",
       "@rubric-dev/core": "workspace:^",
-      "@rubric-dev/packs": "workspace:^"
+      "@rubric-dev/packs": "workspace:^",
+      yaml: "^2.9.0"
     });
   });
 
