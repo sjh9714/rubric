@@ -55,6 +55,18 @@ Rubric catches repeated feedback before review and compiles the same rules into:
 - PR templates
 - GitHub Actions
 
+## From comment to check
+
+```bash
+rubric propose --from-text "API changes need tests" --write
+rubric compile
+rubric check --base main
+```
+
+That flow drafts `.rubric/rules/proposed.api-changes-need-tests.yaml`,
+publishes the rule into configured agent instructions, and checks the next diff
+before review.
+
 ## How Rubric works
 
 Rubric keeps review expectations in `.rubric/rules` so the same standards can
