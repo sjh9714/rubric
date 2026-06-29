@@ -49,6 +49,9 @@ importers:
       commander:
         specifier: ^15.0.0
         version: 15.0.0
+      yaml:
+        specifier: ^2.9.0
+        version: 2.9.0
 
   packages/action: {}
 

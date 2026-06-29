@@ -131,8 +131,17 @@ Implemented:
 | `rubric doctor`   | Checks whether a repo is AI-agent ready.                         |
 | `rubric init`     | Creates starter Rubric config, rules, workflow, and PR template. |
 | `rubric add-pack` | Adds built-in rule packs.                                        |
+| `rubric propose`  | Drafts a rule from repeated review feedback text.                |
 | `rubric compile`  | Generates agent instruction files and PR template blocks.        |
 | `rubric check`    | Checks the current diff against Rubric rules.                    |
+
+Draft a local rule from one repeated review comment:
+
+```bash
+rubric propose --from-text "API changes need tests"
+```
+
+Historical GitHub PR review mining is planned, not implemented yet.
 
 GitHub Action comment mode is implemented as an opt-in delivery path. The
 easiest setup path is:
@@ -154,7 +163,7 @@ steps:
     with:
       fetch-depth: 0
 
-  - uses: sjh9714/rubric/packages/action@v0.2.1
+  - uses: sjh9714/rubric/packages/action@v0.3.0
     with:
       base: origin/${{ github.base_ref }}
       github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -194,6 +203,7 @@ npx @rubric-dev/cli demo
 npx @rubric-dev/cli doctor
 npx @rubric-dev/cli init
 npx @rubric-dev/cli add-pack testing migrations security
+npx @rubric-dev/cli propose --from-text "API changes need tests"
 npx @rubric-dev/cli compile
 npx @rubric-dev/cli check --base main
 ```

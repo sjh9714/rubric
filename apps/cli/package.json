@@ -1,6 +1,6 @@
 {
   "name": "@rubric-dev/cli",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "Team review memory CLI for AI-assisted development.",
   "license": "MIT",
   "repository": {
@@ -44,6 +44,7 @@
     "@rubric-dev/compiler": "workspace:^",
     "@rubric-dev/core": "workspace:^",
     "@rubric-dev/packs": "workspace:^",
-    "commander": "^15.0.0"
+    "commander": "^15.0.0",
+    "yaml": "^2.9.0"
   }
 }
