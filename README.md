@@ -129,7 +129,7 @@ steps:
     with:
       fetch-depth: 0
 
-  - uses: sjh9714/rubric/packages/action@v0.2.0
+  - uses: sjh9714/rubric/packages/action@v0.2.1
     with:
       base: origin/${{ github.base_ref }}
       github-token: ${{ secrets.GITHUB_TOKEN }}

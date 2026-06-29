@@ -2,11 +2,16 @@
 
 ## Project
 
-`rubric` is a local-first TypeScript CLI and GitHub Action for preflight checks on AI-generated pull requests.
+`rubric` is a local-first TypeScript CLI and GitHub Action for team review memory in AI-assisted development.
+
+Rubric turns repeated PR feedback into version-controlled rules that:
+
+- humans can review
+- coding agents can follow
+- CI can check before review
 
 Rubric will:
 
-- turn repeated PR feedback into version-controlled rules
 - check current diffs against deterministic rules
 - compile rules into AGENTS.md, CLAUDE.md, GitHub Copilot instructions, Cursor rules, and PR templates
 - work without LLM API keys for core commands
